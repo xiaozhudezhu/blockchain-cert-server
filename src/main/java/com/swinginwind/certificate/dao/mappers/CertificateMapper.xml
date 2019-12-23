@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.swinginwind.certificate.dao.CertificateMapper" >
+  <resultMap id="BaseResultMap" type="com.swinginwind.certificate.model.Certificate" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="cert_type" property="certType" jdbcType="INTEGER" />
+    <result column="cert_name" property="certName" jdbcType="VARCHAR" />
+    <result column="cert_no" property="certNo" jdbcType="VARCHAR" />
+    <result column="owner_name" property="ownerName" jdbcType="VARCHAR" />
+    <result column="owner_phone" property="ownerPhone" jdbcType="VARCHAR" />
+    <result column="owner_id" property="ownerId" jdbcType="VARCHAR" />
+    <result column="owner_email" property="ownerEmail" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+    <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, cert_type, cert_name, cert_no, owner_name, owner_phone, owner_id, owner_email, 
+    create_user, create_time, update_user, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_certificate
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_certificate
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.swinginwind.certificate.model.Certificate" >
+    insert into t_certificate (id, cert_type, cert_name, 
+      cert_no, owner_name, owner_phone, 
+      owner_id, owner_email, create_user, 
+      create_time, update_user, update_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{certType,jdbcType=INTEGER}, #{certName,jdbcType=VARCHAR}, 
+      #{certNo,jdbcType=VARCHAR}, #{ownerName,jdbcType=VARCHAR}, #{ownerPhone,jdbcType=VARCHAR}, 
+      #{ownerId,jdbcType=VARCHAR}, #{ownerEmail,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.swinginwind.certificate.model.Certificate" >
+    insert into t_certificate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="certType != null" >
+        cert_type,
+      </if>
+      <if test="certName != null" >
+        cert_name,
+      </if>
+      <if test="certNo != null" >
+        cert_no,
+      </if>
+      <if test="ownerName != null" >
+        owner_name,
+      </if>
+      <if test="ownerPhone != null" >
+        owner_phone,
+      </if>
+      <if test="ownerId != null" >
+        owner_id,
+      </if>
+      <if test="ownerEmail != null" >
+        owner_email,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="certType != null" >
+        #{certType,jdbcType=INTEGER},
+      </if>
+      <if test="certName != null" >
+        #{certName,jdbcType=VARCHAR},
+      </if>
+      <if test="certNo != null" >
+        #{certNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerName != null" >
+        #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerPhone != null" >
+        #{ownerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerEmail != null" >
+        #{ownerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.swinginwind.certificate.model.Certificate" >
+    update t_certificate
+    <set >
+      <if test="certType != null" >
+        cert_type = #{certType,jdbcType=INTEGER},
+      </if>
+      <if test="certName != null" >
+        cert_name = #{certName,jdbcType=VARCHAR},
+      </if>
+      <if test="certNo != null" >
+        cert_no = #{certNo,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerName != null" >
+        owner_name = #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerPhone != null" >
+        owner_phone = #{ownerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        owner_id = #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerEmail != null" >
+        owner_email = #{ownerEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.swinginwind.certificate.model.Certificate" >
+    update t_certificate
+    set cert_type = #{certType,jdbcType=INTEGER},
+      cert_name = #{certName,jdbcType=VARCHAR},
+      cert_no = #{certNo,jdbcType=VARCHAR},
+      owner_name = #{ownerName,jdbcType=VARCHAR},
+      owner_phone = #{ownerPhone,jdbcType=VARCHAR},
+      owner_id = #{ownerId,jdbcType=VARCHAR},
+      owner_email = #{ownerEmail,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="select" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,
+    (select t1.nick_name from t_sys_user t1 where t.create_user=t1.id) as create_user_name,
+    (select t2.nick_name from t_sys_user t2 where t.update_user=t2.id) as update_user_name
+    from t_certificate t
+    <where>
+      <if test="id != null">
+        and t.id = #{id}
+      </if>
+      <if test="certType != null">
+        and t.CERT_TYPE = #{certType}
+      </if>
+      <if test="certNo != null">
+        and t.CERT_NO = #{certNo}
+      </if>
+      <if test="certName != null">
+        and t.CERT_NAME like concat('%', #{certName}, '%')
+      </if>
+      <if test="ownerId != null">
+        and t.OWNER_ID = #{ownerId}
+      </if>
+      <if test="ownerPhone != null">
+        and t.OWNER_PHONE = #{ownerPhone}
+      </if>
+      <if test="ownerEmail != null">
+        and t.OWNER_EMAIL = #{ownerEmail}
+      </if>
+      <if test="createUser != null">
+        and t.create_user = #{createUser}
+      </if>
+      <if test="startTime != null">
+        and t.CREATE_TIME &gt; #{startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null">
+        and t.CREATE_TIME &lt; date_add(#{endTime,jdbcType=TIMESTAMP}, interval 1 day)
+      </if>
+    </where>
+    order by CREATE_TIME desc
+  </select>
+</mapper>

@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.swinginwind.iknowu.dao.TablemaintenanceMapper">
+	<resultMap id="tablesMap" type="com.swinginwind.iknowu.model.Tablemaintenance">
+		<id column="" property=""/>
+		<id column="id" property="id"/>
+		<id column="viewCode" property="viewCode"/>
+		<id column="codename" property="codename"/>
+		<id column="tablename" property="tablename"/>
+		<id column="abbreviation" property="abbreviation"/>
+		<id column="classcode" property="classcode"/>
+		<id column="labelsWidth" property="labelsWidth"/>
+		<id column="contentsWidth" property="contentsWidth"/>
+		<id column="createUser" property="createUser"/>
+		<id column="createTime" property="createTime"/>
+		<id column="filterRule" property="filterRule"/>
+		<id column="dynamicTitle" property="dynamicTitle"/>
+		<id column="workflowStatus" property="workflowStatus"/>
+		<id column="rowsPerPage" property="rowsPerPage"/>
+		<collection property="menus" ofType="string">
+			<id column="MENUS"/>
+		</collection>
+	</resultMap>
+
+	<select id="query" parameterType="com.swinginwind.iknowu.model.Tablemaintenance" resultMap="tablesMap">
+		SELECT 
+			t.ID as "id", 
+			t.CODENAME as "codename", 
+			t.TABLENAME as "tablename", 
+			t.ABBREVIATION as "abbreviation", 
+			t.CLASSCODE as "classcode" ,
+			t.VIEWCODE as "viewCode",
+			t.LABELS_WIDTH as "labelsWidth", 
+			t.CONTENTS_WIDTH as "contentsWidth", 
+			t.CREATE_USER as "createUser" ,
+			t.CREATE_TIME as "createTime" ,
+			t.FILTER_RULE as "filterRule" ,
+			t.DYNAMIC_TITLE as "dynamicTitle",
+			t.WORKFLOW_STATUS as "workflowStatus", 
+			t.ROWS_PER_PAGE as "rowsPerPage",
+			m.NAME as MENUS 
+		FROM IDP_VIEW t 
+		LEFT JOIN IDP_MENU m ON m.url like '/report/generalReport/'||t.viewcode 
+		or m.url like '/report/generalReport/'||t.viewcode||'/%' 
+		<where>
+			<if test="id !=null and id != ''">
+				and t.ID = #{id} 
+			</if>
+			<if test="codename !=null and codename != ''">
+				and t.CODENAME = #{codename} 
+			</if>
+			<if test="tablename !=null and tablename != ''">
+				and t.TABLENAME = #{tablename} 
+			</if>
+			<if test="abbreviation !=null and abbreviation != ''">
+				and t.ABBREVIATION = #{abbreviation} 
+			</if>
+			<if test="classcode !=null and classcode != ''">
+				and t.CLASSCODE = #{classcode} 
+			</if>
+			<if test="labelsWidth !=null and labelsWidth != ''">
+				and t.LABELS_WIDTH = #{labelsWidth} 
+			</if>
+			<if test="contentsWidth !=null and contentsWidth != ''">
+				and t.CONTENTS_WIDTH = #{contentsWidth} 
+			</if>
+			<if test="viewCode !=null and viewCode != ''">
+				and t.VIEWCODE = #{viewCode} 
+			</if>
+			<if test="createUser !=null and createUser != ''">
+				and t.CREATE_USER = #{createUser} 
+			</if>
+			<if test="createTime !=null and createTime != ''">
+				and t.CREATE_TIME = #{createTime} 
+			</if>
+			<if test="filterRule !=null and filterRule != ''">
+				and t.FILTER_RULE = #{filterRule} 
+			</if>
+			<if test="rowsPerPage !=null and rowsPerPage != ''">
+				and t.ROWS_PER_PAGE = #{rowsPerPage} 
+			</if>
+		</where>
+		<choose>
+			<when test="order != null and order != ''">
+				ORDER BY ${order}
+			</when>
+			<otherwise>
+				ORDER BY t.CREATE_TIME DESC,t.CODENAME,t.VIEWCODE desc
+			</otherwise>
+		</choose>
+		<!-- <if test="order != null and order != ''">
+			ORDER BY ${order} 
+		</if> -->
+	</select>
+	
+	<!-- 查询所有配置表，目前用于外键。之前是只查询物理表，不区分视图。后改为查询所有视图，这样做的目的是可以通过视图控制【外键选择表格】的显示字段数目 -->
+	<select id="getAllTable" resultType="com.swinginwind.iknowu.model.Tablemaintenance">
+		SELECT 
+			<!-- DISTINCT CODENAME -->
+			VIEWCODE,TABLENAME
+		FROM IDP_VIEW 
+		ORDER BY VIEWCODE
+	</select>
+	
+	<select id="count" parameterType="com.swinginwind.iknowu.model.Tablemaintenance" resultType="int">
+		SELECT count(*) FROM IDP_VIEW 
+		<where>
+			<if test="id != null and id != ''">
+				and ID = #{id} 
+			</if>
+			<if test="codename != null and codename != ''">
+				and CODENAME = #{codename} 
+			</if>
+			<if test="tablename != null and tablename != ''">
+				and TABLENAME = #{tablename} 
+			</if>
+			<if test="abbreviation != null and abbreviation != ''">
+				and ABBREVIATION = #{abbreviation} 
+			</if>
+			<if test="classcode != null and classcode != ''">
+				and CLASSCODE = #{classcode} 
+			</if>
+			<if test="labelsWidth != null and labelsWidth != ''">
+				and LABELS_WIDTH = #{labelsWidth} 
+			</if>
+			<if test="contentsWidth != null and contentsWidth != ''">
+				and CONTENTS_WIDTH = #{contentsWidth} 
+			</if>
+			<if test="viewCode != null and viewCode != ''">
+				and VIEWCODE = #{viewCode} 
+			</if>
+			<if test="createUser !=null and createUser != ''">
+				and CREATE_USER = #{createUser} 
+			</if>
+			<if test="createTime !=null and createTime != ''">
+				and CREATE_TIME = #{createTime} 
+			</if>
+			<if test="filterRule !=null and filterRule != ''">
+				and FILTER_RULE = #{filterRule} 
+			</if>
+			<if test="rowsPerPage !=null and rowsPerPage != ''">
+				and ROWS_PER_PAGE = #{rowsPerPage} 
+			</if>
+		</where>
+	</select>
+	
+	<!-- <select id="queryMaxView" parameterType="com.swinginwind.iknowu.model.Tablemaintenance" resultType="com.swinginwind.iknowu.model.Tablemaintenance">
+		SELECT 
+			ID as "id", 
+			CODENAME as "codename", 
+			TABLENAME as "tablename", 
+			ABBREVIATION as "abbreviation", 
+			CLASSCODE as "classcode" ,
+			VIEWCODE as "viewCode"
+		FROM IDP_VIEW 
+		<where>
+			<if test="id !=null and id != ''">
+				and ID = #{id} 
+			</if>
+			<if test="codename !=null and codename != ''">
+				and CODENAME = #{codename} 
+			</if>
+			<if test="tablename !=null and tablename != ''">
+				and TABLENAME = #{tablename} 
+			</if>
+			<if test="abbreviation !=null and abbreviation != ''">
+				and ABBREVIATION = #{abbreviation} 
+			</if>
+			<if test="classcode !=null and classcode != ''">
+				and CLASSCODE = #{classcode} 
+			</if>
+		</where>
+		ORDER BY CODENAME
+	</select> -->
+
+	<insert id="save">
+		INSERT INTO IDP_VIEW (
+			<trim prefix=" " suffixOverrides=", ">
+				<if test="id != null">
+					ID, 
+				</if>
+				<if test="viewCode != null">
+					VIEWCODE, 
+				</if>
+				<if test="codename != null">
+					CODENAME, 
+				</if>
+				<if test="tablename != null">
+					TABLENAME, 
+				</if>
+				<if test="abbreviation != null">
+					ABBREVIATION, 
+				</if>
+				<if test="classcode != null">
+					CLASSCODE, 
+				</if>
+				<if test="labelsWidth != null">
+					LABELS_WIDTH, 
+				</if>
+				<if test="contentsWidth != null">
+					CONTENTS_WIDTH, 
+				</if>
+				<if test="createUser != null">
+					CREATE_USER, 
+				</if>
+				<if test="createTime != null">
+					CREATE_TIME, 
+				</if>
+				<if test="filterRule != null">
+					FILTER_RULE, 
+				</if>
+				<if test="rowsPerPage != null">
+					ROWS_PER_PAGE
+				</if>
+			</trim>
+		) VALUES (
+			<trim prefix=" " suffixOverrides=", ">
+				<if test="id != null">
+					#{id}, 
+				</if>
+				<if test="viewCode != null">
+					#{viewCode}, 
+				</if>
+				<if test="codename != null">
+					#{codename}, 
+				</if>
+				<if test="tablename != null">
+					#{tablename}, 
+				</if>
+				<if test="abbreviation != null">
+					#{abbreviation}, 
+				</if>
+				<if test="classcode != null">
+					#{classcode}, 
+				</if>
+				<if test="labelsWidth != null">
+					#{labelsWidth}, 
+				</if>
+				<if test="contentsWidth != null">
+					#{contentsWidth}, 
+				</if>
+				<if test="createUser != null">
+					#{createUser}, 
+				</if>
+				<if test="createTime != null">
+					#{createTime}, 
+				</if>
+				<if test="filterRule != null">
+					#{filterRule}, 
+				</if>
+				<if test="rowsPerPage != null">
+					#{rowsPerPage}
+				</if>
+			</trim>
+		) 
+	</insert>
+
+	<update id="update">
+		UPDATE IDP_VIEW  
+		<set>
+			<!-- <if test="id != null">
+				ID = #{id}, 
+			</if> -->
+			<if test="codename != null">
+				CODENAME = #{codename}, 
+			</if>
+			<if test="tablename != null">
+				TABLENAME = #{tablename}, 
+			</if>
+			<if test="abbreviation != null">
+				ABBREVIATION = #{abbreviation}, 
+			</if>
+			<if test="classcode != null">
+				CLASSCODE = #{classcode}, 
+			</if>
+			<if test="labelsWidth != null">
+				LABELS_WIDTH = #{labelsWidth}, 
+			</if>
+			<if test="contentsWidth != null">
+				CONTENTS_WIDTH = #{contentsWidth}, 
+			</if>
+			<if test="createUser != null">
+				CREATE_USER = #{createUser}, 
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime}, 
+			</if>
+			<if test="filterRule != null">
+				FILTER_RULE = #{filterRule}, 
+			</if>
+			<if test="rowsPerPage != null">
+				ROWS_PER_PAGE = #{rowsPerPage}
+			</if>
+		</set>
+		WHERE ID = #{id} 
+	</update>
+
+	<delete id="delete" parameterType="com.swinginwind.iknowu.model.Tablemaintenance">
+		DELETE FROM IDP_VIEW 
+		WHERE ID = #{id} 
+	</delete>
+	
+	<!-- 删除表 -->
+	<delete id="deletedata" parameterType="com.swinginwind.iknowu.model.Tablemaintenance">
+		DELETE FROM ${codename}
+	</delete>
+	
+	<!-- 删除表字段 -->
+	<select id="deletefield" parameterType="map">
+		alter table ${codename} drop ( ${fieldName} )
+	</select>
+	
+	<!-- 删除表 -->
+	<update id="deletetable" parameterType="com.swinginwind.iknowu.model.Tablemaintenance">	
+		drop table ${codename}
+	</update>
+	
+	<!-- 新增表 -->
+	<update id="inserttable" parameterType="map">	
+		drop table if exists ${tableCode};
+		create table ${tableCode}
+		<foreach collection="fields" item="item" open="(" separator=",">
+			${item.name} ${item.type}
+			<if test="item.length!=null">(${item.length}</if>
+			<if test="item.length!=null and item.decimalCount!=null">,${item.decimalCount})</if>
+			<if test="item.length!=null and item.decimalCount==null">)</if>
+			<if test="item.isEmpty==0"> not null </if>comment #{item.title}
+		</foreach>,
+		primary key(${primaryKey}));
+		alter table ${tableCode} comment #{tableName}
+		<!-- <foreach collection="fields" item="item" separator=";">
+			comment on column ${codename}.${item.name}
+  				is #{item.title}
+		</foreach> -->
+	</update>
+	
+	<!-- 新增表字段 -->
+	<update id="insertfield" parameterType="map">	
+		alter table ${codename} add
+		<foreach collection="fields" item="item" open="(" separator="," close=")">
+			${item.name} ${item.type}
+			<if test="item.length!=null">(${item.length}</if>
+			<if test="item.length!=null and item.decimalCount!=null">,${item.decimalCount})</if>
+			<if test="item.length!=null and item.decimalCount==null">)</if>
+		</foreach>
+		<!-- <foreach collection="fields" item="item" separator=";">
+			comment on column ${codename}.${item.name}
+  				is #{item.title}
+		</foreach> -->
+	</update>
+	
+	<!-- 修改字段长度 -->
+	<update id="updatefield" parameterType="map">
+		alter table ${codename} modify
+		<foreach collection="fields" item="item" open="(" separator="," close=")">
+			${item.name} ${item.type}
+			<if test="item.length!=null">(${item.length}</if>
+			<if test="item.length!=null and item.decimalCount!=null">,${item.decimalCount})</if>
+			<if test="item.length!=null and item.decimalCount==null">)</if>
+		</foreach>
+	</update>
+	
+	<!-- 为字段添加注释 -->
+	<update id="commentForField" parameterType="java.util.Map">
+		comment on column ${codename}.${fieldName}
+  			is '${title}'
+	</update>
+	
+	<!-- 查询已有表的主键-主键别名 -->
+	<select id="getPrimaryKey" parameterType="java.util.Map" resultType="java.lang.String">
+		SELECT uc.CONSTRAINT_NAME 
+		from user_constraints uc,user_cons_columns ucc 
+    	WHERE uc.CONSTRAINT_NAME = ucc.CONSTRAINT_NAME AND uc.OWNER = ucc.OWNER AND uc.TABLE_NAME = ucc.TABLE_NAME
+		AND uc.TABLE_NAME = #{tableCodeName} AND uc.CONSTRAINT_TYPE = 'P'
+	</select>
+	
+	<!-- 查询已有表的主键-字段名 -->
+	<select id="getPrimaryKey_COL" parameterType="java.util.Map" resultType="java.lang.String">
+		SELECT ucc.COLUMN_NAME 
+		from user_constraints uc,user_cons_columns ucc 
+    	WHERE uc.CONSTRAINT_NAME = ucc.CONSTRAINT_NAME AND uc.OWNER = ucc.OWNER AND uc.TABLE_NAME = ucc.TABLE_NAME
+		AND uc.TABLE_NAME = #{tableCodeName} AND uc.CONSTRAINT_TYPE = 'P'
+	</select>
+	
+	<!-- 给已有表添加主键 -->
+	<update id="addPrimaryKey" parameterType="java.util.Map">
+		ALTER TABLE ${tableCodeName}
+		ADD PRIMARY KEY(${primaryKey})
+	</update>
+	
+	<!-- 删除已有表的主键 -->
+	<update id="deletePrimayKey" parameterType="java.util.Map">
+		ALTER TABLE ${tableCodeName}
+		DROP constraint ${primaryKey}
+	</update>
+	
+	<!-- 查询已有表的唯一性约束 -->
+	<select id="getUniqueConstraintName" parameterType="java.util.Map" resultType="java.lang.String">
+		SELECT uc.CONSTRAINT_NAME 
+		from user_constraints uc,user_cons_columns ucc 
+    	WHERE uc.CONSTRAINT_NAME = ucc.CONSTRAINT_NAME AND uc.OWNER = ucc.OWNER AND uc.TABLE_NAME = ucc.TABLE_NAME
+		AND uc.TABLE_NAME = #{codename} AND ucc.COLUMN_NAME = #{fieldName} AND uc.CONSTRAINT_TYPE = 'U'
+	</select>
+	
+	<!-- 给已有表某个字段添加唯一性约束 -->
+	<update id="addUniqueConstraint" parameterType="java.util.Map">
+		ALTER TABLE ${codename}
+		add constraint ${codename}_${fieldName}
+		unique (${fieldName})
+	</update>
+	
+	<!-- 删除已有表唯一性约束 -->
+	<update id="deleteUniqueConstraint" parameterType="java.util.Map">
+		ALTER TABLE ${codename}
+		DROP constraint ${uniqueConstraintName}
+	</update>
+	
+	<!-- 查询用户所有物理表 -->
+	<select id="queryTable" resultType="java.lang.String">
+		SELECT TABLE_NAME FROM USER_TABLES WHERE TABLE_NAME IN 
+		<foreach collection="names" item="item" open="(" separator="," close=")">
+			#{item} 
+		</foreach>
+		UNION  
+		SELECT 
+			CODENAME 
+		FROM IDP_VIEW WHERE CODENAME IN 
+		<foreach collection="names" item="item" open="(" separator="," close=")">
+			#{item} 
+		</foreach>
+	</select>
+	
+	<!-- 查询用户所有表 -->
+	<select id="queryTableExists" resultType="int">
+		select count(1) from user_tables where TABLE_NAME = #{tableName}
+	</select>
+	
+	<select id="queryMaxViewCode" resultType="java.lang.String">
+	    select *
+		from (
+			select viewcode
+		    	from IDP_VIEW
+		        where CODENAME = #{tableName} and viewcode is not null
+		        order by to_number(regexp_substr(viewcode,'[[:digit:]]+$')) desc
+		 ) where rownum = 1
+	</select>
+	
+	<update id="updateDynamicTitle">
+		UPDATE IDP_VIEW  
+	    SET DYNAMIC_TITLE = #{dynamicTitle}
+		WHERE viewcode = #{viewCode} 
+	</update>
+	
+	<!-- 查询指定表名及注释 -->
+	<select id="getSysTables" resultType="com.swinginwind.iknowu.model.Tablemaintenance">
+		SELECT 
+			t.TABLE_NAME as "codename",
+			(SELECT
+				NVL(tc.COMMENTS,tc.TABLE_NAME)
+			FROM USER_TAB_COMMENTS tc
+			WHERE tc.TABLE_NAME=t.TABLE_NAME
+			AND tc.TABLE_TYPE='TABLE') as TABLENAME
+		FROM (SELECT TABLE_NAME FROM USER_TABLES ORDER BY TABLE_NAME) t
+		WHERE t.TABLE_NAME not in (
+			SELECT codename FROM IDP_VIEW
+		)
+		UNION ALL
+	    SELECT
+			v.VIEW_NAME as "codename",
+			(SELECT
+	        	NVL(tc.COMMENTS,tc.TABLE_NAME)||'(视图)'
+			FROM USER_TAB_COMMENTS tc
+			WHERE tc.TABLE_TYPE='VIEW'
+			AND tc.TABLE_NAME=v.VIEW_NAME) as TABLENAME
+	    FROM (SELECT VIEW_NAME FROM USER_VIEWS ORDER BY VIEW_NAME) v
+	    WHERE v.VIEW_NAME not in (
+			SELECT codename FROM IDP_VIEW
+		)
+		<if test="codename !=null and codename != ''">
+			and t.TABLE_NAME = #{codename} 
+		</if>
+		<if test="tablename !=null and tablename != ''">
+			and TABLENAME = #{tablename} 
+		</if>
+	</select>
+	
+	<!-- 复制指定表的数据 -->
+	<insert id="insertCopyData">
+	    INSERT INTO ${tablename } 
+	    <foreach collection="fields" item="item" open="(" separator="," close=")">
+	    	${item.name } 
+	    </foreach>
+	    SELECT 
+	    <foreach collection="fields" item="item" separator=",">
+	        <choose>
+	            <when test="item.isPrimary == 1">
+	                <if test="primaryVal != null and primaryVal != ''">
+			        	${uniqueVal } 
+				    </if>
+				    <if test="primaryVal == null or primaryVal == ''">
+						sys_guid() 
+				    </if>
+	            </when>
+	            <when test="fixedFields != null and fixedFields[item.name] != null">
+	                #{fixedFields.${item.name} } 
+	            </when>
+	            <when test="fixedFieldSql != null and fixedFieldSql[item.name] != null">
+	                ${fixedFieldSql[item.name] } 
+	            </when>
+	            <otherwise>
+	                ${item.name } 
+	            </otherwise>
+	        </choose>
+	    </foreach>
+	    FROM ${tablename } where ${condition}
+	</insert>
+	
+</mapper>

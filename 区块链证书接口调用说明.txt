@@ -1,0 +1,347 @@
+﻿﻿访问地址：http://47.96.161.119/blockchain-cert-server
+消息头：Content-Type: application/json
+HTTP方法：POST
+*****登录成功后需要增加HTTP Header令牌信息：Login-Token=loginToken，如果未带令牌或令牌已失效，则访问除了/login /register等（详见spring-mvc配置文件排除列表）之外的请求将会返回HTTP STATUS = 401
+
+---登录：
+/login
+请求：
+{
+	"userName": "demo",  //用户名
+	"pwd": "demo"        //密码
+}
+响应：
+{
+	"msg": "",           //响应信息，比如详细错误信息，下同
+	"errorCode": null,   //错误代码，下同
+	"loginToken": "c9c5134fa24848ee81fe81f9d15fd85a", //令牌，后续请求需要增加Login-Token的http header
+	"user": {
+		"id": 1,
+		"userName": "demo",
+		"nickName": "demo",
+		"gender": "1",  //性别，m：男；f：女
+		"age": 33,
+		"pwd": "fe01ce2a7fbac8fafaed7c982a04e229",
+		"qrCodeUrl": 6,
+		"status": "1",
+		"createTime": "2018-05-26 08:57:21",
+		"admin": true      //是否管理员，用于判定是否能进行只有管理员能执行的操作
+		"masterInfo": {    //认证的导师信息
+			"tid": "1",
+			"mastername": "lifesinger",
+			"fields": "淘宝前端类库 KISSY、前端模块化开发框架SeaJS、前端基础类库Arale的创始人。",
+			"level": "5",
+			"monthCount": 50, //月度答题量
+			"userId": 1
+		}
+	},
+	"status": "success"  //响应状态，success表示成功，其他为失败；下同
+}
+
+---退出登录
+/logout
+
+
+
+---注册
+/register
+请求
+{
+	"userName": "dmj",           //登录名
+	"pwd": "111111",             //密码
+	"nickName": "邓孟君",        //昵称
+	"email": "123@wdn.com",      //邮箱
+	"phonecall": "1234567890",   //电话
+	"gender": "m",               //性别，f/m
+	"headImgUrl": "3",           //头像对应的fileId，需要先调用/file/uploadFile上传头像，用/file/getFile?id=访问对应的图片
+	"city": "上海"               //城市
+}
+响应
+成功
+{
+	"msg": "注册成功",
+	"errorCode": null,
+	"status": "success"
+}
+账号已存在
+{
+	"msg": "注册失败，账号已存在",
+	"errorCode": null,
+	"status": "success"
+}
+
+
+---获取短信验证码
+/sendVerifyCode
+请求
+{
+	"phone": "15021930517"
+}
+响应
+{
+	"msg": "验证码发送成功",
+	"errorCode": null,
+	"sessionId": "42b36e3ecf0a4e85bcdbace473c21d5c",   //sessionId，验证验证码需要传入
+	"status": "success"
+}
+
+---验证短信验证码：doLogin不传或不等于1时，单纯验证验证码；doLogin=1时如果未注册则成功后会创建一条用户记录；如果已注册过，则直接返回该用户记录
+/checkVerifyCode
+请求
+{
+	"sessionId": "2815687191554d20ba83912d7bc87d19",   //前一个接口返回的sessionId
+	"code": "717625",                                  //验证码
+	"doLogin": "1"                                     //是否用于登录
+}
+响应
+成功
+{
+	"msg": "验证成功",
+	"errorCode": null,
+	"loginToken": "c9c5134fa24848ee81fe81f9d15fd85a",  //令牌，后续请求需要增加Login-Token的http header
+	"user": {
+		"id": 18,
+		"phonecall": "15021930517",
+		"qrCodeUrl": "26",
+		"status": "1",
+		"createTime": "2019-01-02 19:29:44",
+		"admin": false
+	},
+	"status": "success"
+}
+失败
+{
+	"msg": "验证失败",
+	"errorCode": null,
+	"status": "failed"
+}
+
+
+---更新用户信息
+/user/updateUser
+请求
+{
+	"id": 10,
+	"userName": "dmj",
+	"nickName": "邓孟君",
+	"email": "123@wdn.com",
+	"phonecall": "1234567890",
+	"gender": "m",
+	"headImgUrl": "3",
+	"city": "上海"
+}
+
+响应
+{
+	"msg": "修改成功",
+	"errorCode": null,
+	"user": {
+		"id": 10,
+		"userName": "dmj",
+		"nickName": "邓孟君",
+		"pwd": "96e79218965eb72c92a549dd5a330112",
+		"email": "123@wdn.com",                       //邮箱
+		"phonecall": "1234567890",                    //电话号码
+		"gender": "m",                                //性别 f/m
+		"headImgUrl": "3",                            //头像对应的fileId，用/file/getFile?id=访问对应的图片
+		"city": "上海",                               //地区
+		"qrCodeUrl": "7",                             //二维码对应的fileId，用/file/getFile?id=访问对应的图片
+		"status": "1",
+		"createTime": "2018-12-21 12:41:04"
+	},
+	"status": "success"
+}
+
+
+---更新密码
+/user/updatePwd
+请求
+{
+	"id": 10,
+        "pwd": "111111"
+}
+响应
+{
+	"msg": "修改成功",
+	"errorCode": null,
+	"status": "success"
+}
+
+---获取用户头像
+/user/getHeadImg?userId=3
+请求方法：get
+请求参数：userId 用户ID
+响应：返回头像图片内容
+
+
+---创建证书
+/cert/create
+请求：
+{
+	"certType": 1,                          //证书类别
+	"certNo": "NO123",                      //证书编码
+	"certName": "JAVA中级证书",             //证书名称
+	"ownerName": "Jimmy",                   //所有人名称
+	"ownerPhone": "11111111111",            //所有人电话
+	"ownerId": "123",                       //所有人身份证
+	"ownerEmail": "1",                      //所有人邮箱
+	"files": [                              //上传的附件，要先逐个调用/file/uploadFile上传文件并返回fileId，将此fileId提交
+		{
+			"id": 2
+		}
+	]
+}
+响应：
+{
+	"msg": "create success!",
+	"errorCode": null,
+	"status": "success",
+	"cert": {    //证书信息
+		"id": "9bbbacfedb074d4b8e16bf13b526b437", //证书ID
+		"certType": 1,                            //证书类别
+	        "certNo": "NO123",                        //证书编码
+	        "certName": "JAVA中级证书",               //证书名称
+	        "ownerName": "Jimmy",                     //所有人名称
+	        "ownerPhone": "11111111111",              //所有人电话
+	        "ownerId": "123",                         //所有人身份证
+	        "ownerEmail": "1",                        //所有人邮箱
+		"createUser": 1,
+		"createTime": "2019-12-22 00:00:00",
+		"updateUser": 1,
+		"updateTime": "2019-12-22 00:00:00"
+		"files": [{                             //附件列表
+			"id": 2,
+			"sortCode": 1,
+			"recordId": "8ee719daf0ca4a5ea1cc30763686a3a7",
+			"recordType": "CERT_FILE"
+		}]
+	}
+}
+
+---更新证书
+/cert/update
+请求：
+{       
+        "id": "9bbbacfedb074d4b8e16bf13b526b437",//证书ID，必填
+	"certType": 1,                          //证书类别
+	"certNo": "NO123",                      //证书编码
+	"certName": "JAVA中级证书",             //证书名称
+	"ownerName": "Jimmy",                   //所有人名称
+	"ownerPhone": "11111111111",            //所有人电话
+	"ownerId": "123",                       //所有人身份证
+	"ownerEmail": "1",                      //所有人邮箱
+	"files": [                              //上传的附件，要先逐个调用/file/uploadFile上传文件并返回fileId，将此fileId提交
+		{
+			"id": 2
+		}
+	]
+}
+响应：
+{
+	"msg": "update success!",
+	"errorCode": null,
+	"status": "success",
+	"cert": {    //证书信息
+		"id": "9bbbacfedb074d4b8e16bf13b526b437", //证书ID
+		"certType": 1,                            //证书类别
+	        "certNo": "NO123",                        //证书编码
+	        "certName": "JAVA中级证书",               //证书名称
+	        "ownerName": "Jimmy",                     //所有人名称
+	        "ownerPhone": "11111111111",              //所有人电话
+	        "ownerId": "123",                         //所有人身份证
+	        "ownerEmail": "1",                        //所有人邮箱
+		"createUser": 1,
+		"createTime": "2019-12-22 00:00:00",
+		"updateUser": 1,
+		"updateTime": "2019-12-22 00:00:00"
+		"files": [{                             //附件列表
+			"id": 2,
+			"sortCode": 1,
+			"recordId": "8ee719daf0ca4a5ea1cc30763686a3a7",
+			"recordType": "CERT_FILE"
+		}]
+	}
+}
+
+---删除证书
+/cert/delete
+请求：
+{       
+        "id": "9bbbacfedb074d4b8e16bf13b526b437"//证书ID，必填
+}
+响应：
+{
+	"msg": "delete success!",
+	"errorCode": null,
+	"status": "success"
+}
+
+
+---证书搜索
+/cert/search
+请求：
+{
+	"id": "9bbbacfedb074d4b8e16bf13b526b437", //证书 id
+	"startTime": "2018-11-2 00:00:00",        //开始时间（针对创建时间）
+	"endTime": "2018-11-2 00:00:00",          //截止时间（针对创建时间）
+	"certType": 1,                            //证书类别
+	"certNo": "NO123",                        //证书编码
+	"certName": "JAVA中级证书",               //证书名称
+	"ownerName": "Jimmy",                     //所有人名称
+	"ownerPhone": "11111111111",              //所有人电话
+	"ownerId": "123",                         //所有人身份证
+	"ownerEmail": "1",                        //所有人邮箱
+	"pageNum": 1,                             //当前页码，分页用，默认1
+	"pageSize": 15                            //每页记录条数，分页用，默认15
+}
+
+响应：
+{
+	"msg": "",
+	"total": 1,         //总页数，下同
+	"records": 1,       //总记录数, 下同
+	"errorCode": null, 
+	"page": 1,          //当前页，下同
+	"rows": [{    //证书信息
+		"id": "9bbbacfedb074d4b8e16bf13b526b437", //证书ID
+		"certType": 1,                            //证书类别
+	        "certNo": "NO123",                        //证书编码
+	        "certName": "JAVA中级证书",               //证书名称
+	        "ownerName": "Jimmy",                     //所有人名称
+	        "ownerPhone": "11111111111",              //所有人电话
+	        "ownerId": "123",                         //所有人身份证
+	        "ownerEmail": "1",                        //所有人邮箱
+		"createUser": 1,
+		"createTime": "2019-12-22 00:00:00",
+		"updateUser": 1,
+		"updateTime": "2019-12-22 00:00:00"
+		"files": [{                             //附件列表
+			"id": 2,
+			"sortCode": 1,
+			"recordId": "8ee719daf0ca4a5ea1cc30763686a3a7",
+			"recordType": "CERT_FILE"
+		}]
+	}],
+	"status": "success"
+}
+
+
+
+---文件上传
+/file/uploadFile
+请求：
+file：文件，fileType：文件类型img/video/audio
+响应：
+{
+	"msg": "",
+	"errorCode": null,
+	"status": "success",
+	"fileId": 2
+}
+
+---文件下载（包括图片查看）
+/file/getFile?id=2&thumbnail=1
+thumbnail=1表示请求缩略图，为可选参数
+
+
+

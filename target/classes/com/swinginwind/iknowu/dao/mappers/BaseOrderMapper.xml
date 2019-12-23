@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swinginwind.iknowu.dao.BaseOrderMapper">
+  <resultMap id="BaseResultMap" type="com.swinginwind.iknowu.model.BaseOrder">
+    <id column="OID" jdbcType="CHAR" property="oid" />
+    <result column="FID" jdbcType="CHAR" property="fid" />
+    <result column="TID" jdbcType="CHAR" property="tid" />
+    <result column="NAME" jdbcType="CHAR" property="name" />
+    <result column="ISSUE_CONTENT" jdbcType="CHAR" property="issueContent" />
+    <result column="TYPE" jdbcType="CHAR" property="type" />
+    <result column="CREATE_USER" jdbcType="INTEGER" property="createUser" />
+    <result column="ANSWER_USER" jdbcType="INTEGER" property="answerUser" />
+    <result column="PARENT" jdbcType="CHAR" property="parent" />
+    <result column="DATE" jdbcType="TIMESTAMP" property="date" />
+    <result column="IMPLEVEL" jdbcType="CHAR" property="implevel" />
+    <result column="URGENT" jdbcType="CHAR" property="urgent" />
+    <result column="PRICE" jdbcType="CHAR" property="price" />
+    <result column="MASTER" jdbcType="CHAR" property="master" />
+    <result column="RESOURCE" jdbcType="CHAR" property="resource" />
+    <result column="DUEDATE" jdbcType="TIMESTAMP" property="duedate" />
+    <result column="DELDATE" jdbcType="TIMESTAMP" property="deldate" />
+    <result column="DELPROCESS" jdbcType="CHAR" property="delprocess" />
+    <result column="STATE" jdbcType="CHAR" property="state" />
+    <result column="CUS_CONTENT" jdbcType="CHAR" property="cusContent" />
+    <result column="CUS_RESULT" jdbcType="CHAR" property="cusResult" />
+    <result column="CUSS_CONTENT" jdbcType="CHAR" property="cussContent" />
+    <result column="CUSS_RESULT" jdbcType="CHAR" property="cussResult" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    OID, FID, TID, NAME, ISSUE_CONTENT, TYPE, CREATE_USER, ANSWER_USER, PARENT, DATE, 
+    IMPLEVEL, URGENT, PRICE, MASTER, RESOURCE, DUEDATE, DELDATE, DELPROCESS, STATE, CUS_CONTENT, 
+    CUS_RESULT, CUSS_CONTENT, CUSS_RESULT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_base_order
+    where OID = #{oid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_base_order
+    where OID = #{oid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.swinginwind.iknowu.model.BaseOrder">
+    insert into t_base_order (OID, FID, TID, NAME, 
+      ISSUE_CONTENT, TYPE, CREATE_USER, 
+      ANSWER_USER, PARENT, DATE, 
+      IMPLEVEL, URGENT, PRICE, MASTER, 
+      RESOURCE, DUEDATE, DELDATE, 
+      DELPROCESS, STATE, CUS_CONTENT, 
+      CUS_RESULT, CUSS_CONTENT, CUSS_RESULT
+      )
+    values (#{oid,jdbcType=CHAR}, #{fid,jdbcType=CHAR}, #{tid,jdbcType=CHAR}, #{name,jdbcType=CHAR}, 
+      #{issueContent,jdbcType=CHAR}, #{type,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER}, 
+      #{answerUser,jdbcType=INTEGER}, #{parent,jdbcType=CHAR}, #{date,jdbcType=TIMESTAMP}, 
+      #{implevel,jdbcType=CHAR}, #{urgent,jdbcType=CHAR}, #{price,jdbcType=CHAR}, #{master,jdbcType=CHAR}, 
+      #{resource,jdbcType=CHAR}, #{duedate,jdbcType=TIMESTAMP}, #{deldate,jdbcType=TIMESTAMP}, 
+      #{delprocess,jdbcType=CHAR}, #{state,jdbcType=CHAR}, #{cusContent,jdbcType=CHAR}, 
+      #{cusResult,jdbcType=CHAR}, #{cussContent,jdbcType=CHAR}, #{cussResult,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.swinginwind.iknowu.model.BaseOrder">
+    insert into t_base_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="oid != null">
+        OID,
+      </if>
+      <if test="fid != null">
+        FID,
+      </if>
+      <if test="tid != null">
+        TID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="issueContent != null">
+        ISSUE_CONTENT,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="answerUser != null">
+        ANSWER_USER,
+      </if>
+      <if test="parent != null">
+        PARENT,
+      </if>
+      <if test="date != null">
+        DATE,
+      </if>
+      <if test="implevel != null">
+        IMPLEVEL,
+      </if>
+      <if test="urgent != null">
+        URGENT,
+      </if>
+      <if test="price != null">
+        PRICE,
+      </if>
+      <if test="master != null">
+        MASTER,
+      </if>
+      <if test="resource != null">
+        RESOURCE,
+      </if>
+      <if test="duedate != null">
+        DUEDATE,
+      </if>
+      <if test="deldate != null">
+        DELDATE,
+      </if>
+      <if test="delprocess != null">
+        DELPROCESS,
+      </if>
+      <if test="state != null">
+        STATE,
+      </if>
+      <if test="cusContent != null">
+        CUS_CONTENT,
+      </if>
+      <if test="cusResult != null">
+        CUS_RESULT,
+      </if>
+      <if test="cussContent != null">
+        CUSS_CONTENT,
+      </if>
+      <if test="cussResult != null">
+        CUSS_RESULT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="oid != null">
+        #{oid,jdbcType=CHAR},
+      </if>
+      <if test="fid != null">
+        #{fid,jdbcType=CHAR},
+      </if>
+      <if test="tid != null">
+        #{tid,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=CHAR},
+      </if>
+      <if test="issueContent != null">
+        #{issueContent,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="answerUser != null">
+        #{answerUser,jdbcType=INTEGER},
+      </if>
+      <if test="parent != null">
+        #{parent,jdbcType=CHAR},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="implevel != null">
+        #{implevel,jdbcType=CHAR},
+      </if>
+      <if test="urgent != null">
+        #{urgent,jdbcType=CHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=CHAR},
+      </if>
+      <if test="master != null">
+        #{master,jdbcType=CHAR},
+      </if>
+      <if test="resource != null">
+        #{resource,jdbcType=CHAR},
+      </if>
+      <if test="duedate != null">
+        #{duedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deldate != null">
+        #{deldate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delprocess != null">
+        #{delprocess,jdbcType=CHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="cusContent != null">
+        #{cusContent,jdbcType=CHAR},
+      </if>
+      <if test="cusResult != null">
+        #{cusResult,jdbcType=CHAR},
+      </if>
+      <if test="cussContent != null">
+        #{cussContent,jdbcType=CHAR},
+      </if>
+      <if test="cussResult != null">
+        #{cussResult,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.swinginwind.iknowu.model.BaseOrder">
+    update t_base_order
+    <set>
+      <if test="fid != null">
+        FID = #{fid,jdbcType=CHAR},
+      </if>
+      <if test="tid != null">
+        TID = #{tid,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=CHAR},
+      </if>
+      <if test="issueContent != null">
+        ISSUE_CONTENT = #{issueContent,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="answerUser != null">
+        ANSWER_USER = #{answerUser,jdbcType=INTEGER},
+      </if>
+      <if test="parent != null">
+        PARENT = #{parent,jdbcType=CHAR},
+      </if>
+      <if test="date != null">
+        DATE = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="implevel != null">
+        IMPLEVEL = #{implevel,jdbcType=CHAR},
+      </if>
+      <if test="urgent != null">
+        URGENT = #{urgent,jdbcType=CHAR},
+      </if>
+      <if test="price != null">
+        PRICE = #{price,jdbcType=CHAR},
+      </if>
+      <if test="master != null">
+        MASTER = #{master,jdbcType=CHAR},
+      </if>
+      <if test="resource != null">
+        RESOURCE = #{resource,jdbcType=CHAR},
+      </if>
+      <if test="duedate != null">
+        DUEDATE = #{duedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deldate != null">
+        DELDATE = #{deldate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delprocess != null">
+        DELPROCESS = #{delprocess,jdbcType=CHAR},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=CHAR},
+      </if>
+      <if test="cusContent != null">
+        CUS_CONTENT = #{cusContent,jdbcType=CHAR},
+      </if>
+      <if test="cusResult != null">
+        CUS_RESULT = #{cusResult,jdbcType=CHAR},
+      </if>
+      <if test="cussContent != null">
+        CUSS_CONTENT = #{cussContent,jdbcType=CHAR},
+      </if>
+      <if test="cussResult != null">
+        CUSS_RESULT = #{cussResult,jdbcType=CHAR},
+      </if>
+    </set>
+    where OID = #{oid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.swinginwind.iknowu.model.BaseOrder">
+    update t_base_order
+    set FID = #{fid,jdbcType=CHAR},
+      TID = #{tid,jdbcType=CHAR},
+      NAME = #{name,jdbcType=CHAR},
+      ISSUE_CONTENT = #{issueContent,jdbcType=CHAR},
+      TYPE = #{type,jdbcType=CHAR},
+      CREATE_USER = #{createUser,jdbcType=INTEGER},
+      ANSWER_USER = #{answerUser,jdbcType=INTEGER},
+      PARENT = #{parent,jdbcType=CHAR},
+      DATE = #{date,jdbcType=TIMESTAMP},
+      IMPLEVEL = #{implevel,jdbcType=CHAR},
+      URGENT = #{urgent,jdbcType=CHAR},
+      PRICE = #{price,jdbcType=CHAR},
+      MASTER = #{master,jdbcType=CHAR},
+      RESOURCE = #{resource,jdbcType=CHAR},
+      DUEDATE = #{duedate,jdbcType=TIMESTAMP},
+      DELDATE = #{deldate,jdbcType=TIMESTAMP},
+      DELPROCESS = #{delprocess,jdbcType=CHAR},
+      STATE = #{state,jdbcType=CHAR},
+      CUS_CONTENT = #{cusContent,jdbcType=CHAR},
+      CUS_RESULT = #{cusResult,jdbcType=CHAR},
+      CUSS_CONTENT = #{cussContent,jdbcType=CHAR},
+      CUSS_RESULT = #{cussResult,jdbcType=CHAR}
+    where OID = #{oid,jdbcType=CHAR}
+  </update>
+  <select id="select" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,
+    (select t1.nick_name from t_sys_user t1 where t.create_user=t1.id) as create_user_name,
+    (select t2.nick_name from t_sys_user t2 where t.answer_user=t2.id) as answer_user_name
+    from t_base_order t
+    <where>
+      <if test="oid != null">
+        and t.OID = #{oid}
+      </if>
+      <if test="resource != null">
+        and t.RESOURCE = #{resource}
+      </if>
+      <if test="createUser != null">
+        and t.CREATE_USER = #{createUser,jdbcType=INTEGER}
+      </if>
+      <if test="answerUser != null">
+        and t.ANSWER_USER = #{answerUser,jdbcType=INTEGER}
+      </if>
+      <if test="master == ''">
+        and t.MASTER is null
+      </if>
+      <if test="master != null and master != ''">
+        and t.MASTER = #{master}
+      </if>
+      <if test="startTime != null">
+        and t.DATE &gt; #{startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null">
+        and t.DATE &lt; date_add(#{endTime,jdbcType=TIMESTAMP}, interval 1 day)
+      </if>
+      <if test="states != null">
+      	and t.STATE in <foreach close=")" collection="states" index="index" item="state" open="(" separator=",">
+      	  #{state}
+    	</foreach>
+      </if>
+      <if test="types != null">
+      	and t.TYPE in <foreach close=")" collection="types" index="index" item="type" open="(" separator=",">
+      	  #{type}
+    	</foreach>
+      </if>
+    </where>
+    order by date desc
+  </select>
+</mapper>

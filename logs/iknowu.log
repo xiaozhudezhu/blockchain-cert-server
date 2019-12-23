@@ -1,0 +1,4 @@
+[2018-12-27 12:01:35] [com.cloopen.rest.sdk.CCPRestSmsSDK]-[INFO] - Thu Dec 27 12:01:35 CST 2018 sendTemplateSMS url = https://app.cloopen.com:8883/2013-12-26/Accounts/8a216da867e881cb0167edbed5f702a6/SMS/TemplateSMS?sig=DD41ADFEEC5532A23EF0EDA97387B108
+  [2018-12-27 12:01:35] [com.cloopen.rest.sdk.CCPRestSmsSDK]-[INFO] - Thu Dec 27 12:01:35 CST 2018 sendTemplateSMS Request body =  {"appId":"8a216da867e881cb0167edbed64d02ac","to":"15021930517","templateId":"1","datas":["6532","5"]}
+  [2018-12-27 12:01:35] [com.cloopen.rest.sdk.CCPRestSmsSDK]-[INFO] - Thu Dec 27 12:01:35 CST 2018 sendTemplateSMS response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"2ded3bbd3c9b41d6966ed69d83ba48a1","dateCreated":"20181227120135"}}
+  

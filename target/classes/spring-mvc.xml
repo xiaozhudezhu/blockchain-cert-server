@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.swinginwind.**.controller"
+		use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+
+	<mvc:annotation-driven
+		content-negotiation-manager="contentNegotiationManager">
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageCOnverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+			<!-- 序列化时间格式 -->
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="customObjectMapper"></property>
+			</bean>
+		</mvc:message-converters>
+		<mvc:argument-resolvers>
+			<bean
+				class="com.swinginwind.core.spring.mvc.method.annotation.RequestJsonParamMethodArgumentResolver" />
+			<bean
+				class="com.swinginwind.core.spring.mvc.method.annotation.FormModelMethodArgumentResolver" />
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+
+	<bean id="customObjectMapper" class="com.swinginwind.core.utils.CustomObjectMapper"></bean>
+
+	<!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
+	<bean id="contentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="mediaTypes">
+			<value>
+				json=application/json
+				xml=application/xml
+			</value>
+		</property>
+	</bean>
+
+
+	<!-- 定义JSP文件的位置 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL -->
+	<mvc:default-servlet-handler />
+
+	<!-- 静态资源映射 -->
+	<mvc:resources mapping="/static/**" location="/static/" />
+
+	<!-- 定义无需Controller的url<->view直接映射 -->
+	<mvc:view-controller path="/" view-name="redirect:/portal" />
+	<mvc:view-controller path="/uncompleted" view-name="/error/uncompleted" />
+
+	<!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<!-- 指定所上传文件的总大小,单位字节。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
+		<property name="maxUploadSize" value="102400000" />
+	</bean>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/login" />
+			<mvc:exclude-mapping path="/wxLogin" />
+			<mvc:exclude-mapping path="/register" />
+			<mvc:exclude-mapping path="/sendVerifyCode" />
+			<mvc:exclude-mapping path="/checkVerifyCode" />
+			<mvc:exclude-mapping path="/file/getFile" />
+			<mvc:exclude-mapping path="/user/getHeadImg" />
+			<mvc:exclude-mapping path="/master/search" />
+			<mvc:exclude-mapping path="/resource/search" />
+			<mvc:exclude-mapping path="/order/search" />
+			<mvc:exclude-mapping path="/dic/getTypes" />
+			<mvc:exclude-mapping path="/static/**" />
+			<bean class="com.swinginwind.core.filter.LoginInterceptor"></bean>
+		</mvc:interceptor>
+    </mvc:interceptors>
+
+	<!-- end -->
+</beans>

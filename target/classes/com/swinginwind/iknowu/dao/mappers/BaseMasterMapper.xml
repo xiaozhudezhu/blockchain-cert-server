@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swinginwind.iknowu.dao.BaseMasterMapper">
+  <resultMap id="BaseResultMap" type="com.swinginwind.iknowu.model.BaseMaster">
+    <id column="TID" jdbcType="CHAR" property="tid" />
+    <result column="MASTERNAME" jdbcType="CHAR" property="mastername" />
+    <result column="GENDER" jdbcType="CHAR" property="gender" />
+    <result column="AGE" jdbcType="DECIMAL" property="age" />
+    <result column="ID_NUMBER" jdbcType="CHAR" property="idNumber" />
+    <result column="PHONECALL" jdbcType="CHAR" property="phonecall" />
+    <result column="FIELDS" jdbcType="CHAR" property="fields" />
+    <result column="LEVEL" jdbcType="CHAR" property="level" />
+    <result column="SOURCE" jdbcType="CHAR" property="source" />
+    <result column="WEIXIN" jdbcType="CHAR" property="weixin" />
+    <result column="ALIPAY" jdbcType="CHAR" property="alipay" />
+    <result column="PAYTYPE" jdbcType="CHAR" property="paytype" />
+    <result column="TOTALFEE" jdbcType="DECIMAL" property="totalfee" />
+    <result column="CITY" jdbcType="CHAR" property="city" />
+    <result column="FIRM" jdbcType="CHAR" property="firm" />
+    <result column="RANK" jdbcType="CHAR" property="rank" />
+    <result column="POSITION" jdbcType="CHAR" property="position" />
+    <result column="REG_TIME" jdbcType="TIMESTAMP" property="regTime" />
+    <result column="NEW_TECHER" jdbcType="CHAR" property="newTecher" />
+    <result column="POP_TECHER" jdbcType="CHAR" property="popTecher" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="STATE" jdbcType="CHAR" property="state" />
+    <result column="AUDIT_REMARK" jdbcType="VARCHAR" property="auditRemark" />
+    <result column="AUDIT_RESULT" jdbcType="VARCHAR" property="auditResult" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    TID, MASTERNAME, GENDER, AGE, ID_NUMBER, PHONECALL, FIELDS, LEVEL, SOURCE, WEIXIN, 
+    ALIPAY, PAYTYPE, TOTALFEE, FIRM, RANK, POSITION, REG_TIME, NEW_TECHER, POP_TECHER, 
+    USER_ID, STATE, AUDIT_REMARK, AUDIT_RESULT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_base_master
+    where TID = #{tid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_base_master
+    where TID = #{tid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.swinginwind.iknowu.model.BaseMaster">
+    insert into t_base_master (TID, MASTERNAME, GENDER, 
+      AGE, ID_NUMBER, PHONECALL, 
+      FIELDS, LEVEL, SOURCE, WEIXIN, 
+      ALIPAY, PAYTYPE, TOTALFEE, 
+      CITY, FIRM, RANK, POSITION, 
+      REG_TIME, NEW_TECHER, POP_TECHER, 
+      USER_ID, STATE, AUDIT_REMARK, 
+      AUDIT_RESULT)
+    values (#{tid,jdbcType=CHAR}, #{mastername,jdbcType=CHAR}, #{gender,jdbcType=CHAR}, 
+      #{age,jdbcType=DECIMAL}, #{idNumber,jdbcType=CHAR}, #{phonecall,jdbcType=CHAR}, 
+      #{fields,jdbcType=CHAR}, #{level,jdbcType=CHAR}, #{source,jdbcType=CHAR}, #{weixin,jdbcType=CHAR}, 
+      #{alipay,jdbcType=CHAR}, #{paytype,jdbcType=CHAR}, #{totalfee,jdbcType=DECIMAL}, 
+      #{city,jdbcType=CHAR}, #{firm,jdbcType=CHAR}, #{rank,jdbcType=CHAR}, #{position,jdbcType=CHAR}, 
+      #{regTime,jdbcType=TIMESTAMP}, #{newTecher,jdbcType=CHAR}, #{popTecher,jdbcType=CHAR}, 
+      #{userId,jdbcType=INTEGER}, #{state,jdbcType=CHAR}, #{auditRemark,jdbcType=VARCHAR}, 
+      #{auditResult,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.swinginwind.iknowu.model.BaseMaster">
+    insert into t_base_master
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tid != null">
+        TID,
+      </if>
+      <if test="mastername != null">
+        MASTERNAME,
+      </if>
+      <if test="gender != null">
+        GENDER,
+      </if>
+      <if test="age != null">
+        AGE,
+      </if>
+      <if test="idNumber != null">
+        ID_NUMBER,
+      </if>
+      <if test="phonecall != null">
+        PHONECALL,
+      </if>
+      <if test="fields != null">
+        FIELDS,
+      </if>
+      <if test="level != null">
+        LEVEL,
+      </if>
+      <if test="source != null">
+        SOURCE,
+      </if>
+      <if test="weixin != null">
+        WEIXIN,
+      </if>
+      <if test="alipay != null">
+        ALIPAY,
+      </if>
+      <if test="paytype != null">
+        PAYTYPE,
+      </if>
+      <if test="totalfee != null">
+        TOTALFEE,
+      </if>
+      <if test="city != null">
+        CITY,
+      </if>
+      <if test="firm != null">
+        FIRM,
+      </if>
+      <if test="rank != null">
+        RANK,
+      </if>
+      <if test="position != null">
+        POSITION,
+      </if>
+      <if test="regTime != null">
+        REG_TIME,
+      </if>
+      <if test="newTecher != null">
+        NEW_TECHER,
+      </if>
+      <if test="popTecher != null">
+        POP_TECHER,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="state != null">
+        STATE,
+      </if>
+      <if test="auditRemark != null">
+        AUDIT_REMARK,
+      </if>
+      <if test="auditResult != null">
+        AUDIT_RESULT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tid != null">
+        #{tid,jdbcType=CHAR},
+      </if>
+      <if test="mastername != null">
+        #{mastername,jdbcType=CHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=DECIMAL},
+      </if>
+      <if test="idNumber != null">
+        #{idNumber,jdbcType=CHAR},
+      </if>
+      <if test="phonecall != null">
+        #{phonecall,jdbcType=CHAR},
+      </if>
+      <if test="fields != null">
+        #{fields,jdbcType=CHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=CHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=CHAR},
+      </if>
+      <if test="weixin != null">
+        #{weixin,jdbcType=CHAR},
+      </if>
+      <if test="alipay != null">
+        #{alipay,jdbcType=CHAR},
+      </if>
+      <if test="paytype != null">
+        #{paytype,jdbcType=CHAR},
+      </if>
+      <if test="totalfee != null">
+        #{totalfee,jdbcType=DECIMAL},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=CHAR},
+      </if>
+      <if test="firm != null">
+        #{firm,jdbcType=CHAR},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=CHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=CHAR},
+      </if>
+      <if test="regTime != null">
+        #{regTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newTecher != null">
+        #{newTecher,jdbcType=CHAR},
+      </if>
+      <if test="popTecher != null">
+        #{popTecher,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="auditRemark != null">
+        #{auditRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="auditResult != null">
+        #{auditResult,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.swinginwind.iknowu.model.BaseMaster">
+    update t_base_master
+    <set>
+      <if test="mastername != null">
+        MASTERNAME = #{mastername,jdbcType=CHAR},
+      </if>
+      <if test="gender != null">
+        GENDER = #{gender,jdbcType=CHAR},
+      </if>
+      <if test="age != null">
+        AGE = #{age,jdbcType=DECIMAL},
+      </if>
+      <if test="idNumber != null">
+        ID_NUMBER = #{idNumber,jdbcType=CHAR},
+      </if>
+      <if test="phonecall != null">
+        PHONECALL = #{phonecall,jdbcType=CHAR},
+      </if>
+      <if test="fields != null">
+        FIELDS = #{fields,jdbcType=CHAR},
+      </if>
+      <if test="level != null">
+        LEVEL = #{level,jdbcType=CHAR},
+      </if>
+      <if test="source != null">
+        SOURCE = #{source,jdbcType=CHAR},
+      </if>
+      <if test="weixin != null">
+        WEIXIN = #{weixin,jdbcType=CHAR},
+      </if>
+      <if test="alipay != null">
+        ALIPAY = #{alipay,jdbcType=CHAR},
+      </if>
+      <if test="paytype != null">
+        PAYTYPE = #{paytype,jdbcType=CHAR},
+      </if>
+      <if test="totalfee != null">
+        TOTALFEE = #{totalfee,jdbcType=DECIMAL},
+      </if>
+      <if test="city != null">
+        CITY = #{city,jdbcType=CHAR},
+      </if>
+      <if test="firm != null">
+        FIRM = #{firm,jdbcType=CHAR},
+      </if>
+      <if test="rank != null">
+        RANK = #{rank,jdbcType=CHAR},
+      </if>
+      <if test="position != null">
+        POSITION = #{position,jdbcType=CHAR},
+      </if>
+      <if test="regTime != null">
+        REG_TIME = #{regTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="newTecher != null">
+        NEW_TECHER = #{newTecher,jdbcType=CHAR},
+      </if>
+      <if test="popTecher != null">
+        POP_TECHER = #{popTecher,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=CHAR},
+      </if>
+      <if test="auditRemark != null">
+        AUDIT_REMARK = #{auditRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="auditResult != null">
+        AUDIT_RESULT = #{auditResult,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TID = #{tid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.swinginwind.iknowu.model.BaseMaster">
+    update t_base_master
+    set MASTERNAME = #{mastername,jdbcType=CHAR},
+      GENDER = #{gender,jdbcType=CHAR},
+      AGE = #{age,jdbcType=DECIMAL},
+      ID_NUMBER = #{idNumber,jdbcType=CHAR},
+      PHONECALL = #{phonecall,jdbcType=CHAR},
+      FIELDS = #{fields,jdbcType=CHAR},
+      LEVEL = #{level,jdbcType=CHAR},
+      SOURCE = #{source,jdbcType=CHAR},
+      WEIXIN = #{weixin,jdbcType=CHAR},
+      ALIPAY = #{alipay,jdbcType=CHAR},
+      PAYTYPE = #{paytype,jdbcType=CHAR},
+      TOTALFEE = #{totalfee,jdbcType=DECIMAL},
+      CITY = #{city,jdbcType=CHAR},
+      FIRM = #{firm,jdbcType=CHAR},
+      RANK = #{rank,jdbcType=CHAR},
+      POSITION = #{position,jdbcType=CHAR},
+      REG_TIME = #{regTime,jdbcType=TIMESTAMP},
+      NEW_TECHER = #{newTecher,jdbcType=CHAR},
+      POP_TECHER = #{popTecher,jdbcType=CHAR},
+      USER_ID = #{userId,jdbcType=INTEGER},
+      STATE = #{state,jdbcType=CHAR},
+      AUDIT_REMARK = #{auditRemark,jdbcType=VARCHAR},
+      AUDIT_RESULT = #{auditResult,jdbcType=VARCHAR}
+    where TID = #{tid,jdbcType=CHAR}
+  </update>
+  
+  <select id="select" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,
+    (select city from t_sys_user where t_sys_user.id = t_base_master.user_id) as CITY
+    from t_base_master
+    <where>
+     <if test="mastername != null">
+     	and mastername like concat('%', #{mastername,jdbcType=CHAR}, '%')
+     </if>
+     <if test="newTecher != null and newTecher != ''">
+     	and new_techer = #{newTecher,jdbcType=CHAR}
+     </if>
+     <if test="popTecher != null and popTecher != ''">
+     	and pop_techer = #{popTecher,jdbcType=CHAR}
+     </if>
+     <if test="city != null and city != ''">
+     	and exists (select 1 from t_sys_user where t_sys_user.city = #{city} and t_sys_user.id = t_base_master.tid)
+     </if>
+     <if test="types != null and types.size() > 0">
+     	and exists (select 1 from t_base_master_type where t_base_master_type.type_id in 
+     	<foreach collection="types" item="type" index="index"
+             open="(" close=")" separator=",">
+      	  #{type}
+    	</foreach>
+     	and t_base_master_type.master_id = t_base_master.tid)
+     </if>
+     <if test="popTecher == '1'.toString()">
+      	and (select count(1) from t_base_order where t_base_master.USER_ID = t_base_order.ANSWER_USER) &gt;= ${popCountLimit}
+      </if>
+      <if test="newTecher == '1'.toString()">
+        and REG_TIME &gt;= date_add(now(), interval -${newDayLimit} day) 
+      </if>
+     and state = '3'
+    </where>
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,
+    (select city from t_sys_user where t_sys_user.id = t_base_master.user_id) as CITY
+    from t_base_master
+    <where>
+     <if test="mastername != null">
+     	and mastername like concat('%', #{mastername,jdbcType=CHAR}, '%')
+     </if>
+     <if test="newTecher != null and newTecher != ''">
+     	and new_techer = #{newTecher,jdbcType=CHAR}
+     </if>
+     <if test="popTecher != null and popTecher != ''">
+     	and pop_techer = #{popTecher,jdbcType=CHAR}
+     </if>
+     <if test="city != null and city != ''">
+     	and exists (select 1 from t_sys_user where t_sys_user.city = #{city} and t_sys_user.id = t_base_master.tid)
+     </if>
+     <if test="types != null and types.size() > 0">
+     	and exists (select 1 from t_base_master_type where t_base_master_type.type_id in 
+     	<foreach collection="types" item="type" index="index"
+             open="(" close=")" separator=",">
+      	  #{type}
+    	</foreach>
+     	and t_base_master_type.master_id = t_base_master.tid)
+     </if>
+     <if test="states != null and states.size() > 0" >
+      	and t.STATE in <foreach collection="states" item="state" index="index"
+             open="(" close=")" separator=",">
+      	  #{state}
+    	</foreach>
+      </if>
+    </where>
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_base_master
+    where user_id = #{userId}
+  </select>
+  
+  <update id="updateMasterTypes">
+    delete from t_base_master_type
+    where MASTER_ID = #{tid,jdbcType=CHAR};
+    <if test="typeList != null and typeList.size() > 0">
+      insert into t_base_master_type (master_id, type_id)
+      values
+      <foreach collection ="typeList" item="type" index= "index" separator =",">
+          (#{tid}, #{type.tid})
+      </foreach >
+    </if>
+  </update>
+  
+</mapper>

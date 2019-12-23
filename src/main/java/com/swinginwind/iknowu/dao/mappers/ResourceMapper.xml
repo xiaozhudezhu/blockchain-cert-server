@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swinginwind.iknowu.dao.ResourceMapper">
+  <resultMap id="BaseResultMap" type="com.swinginwind.iknowu.model.Resource">
+    <id column="RID" jdbcType="CHAR" property="rid" />
+    <result column="FID" jdbcType="CHAR" property="fid" />
+    <result column="NAME" jdbcType="CHAR" property="name" />
+    <result column="RES_CONTENT" jdbcType="CHAR" property="resContent" />
+    <result column="TYPE" jdbcType="CHAR" property="type" />
+    <result column="CREATE_USER" jdbcType="INTEGER" property="createUser" />
+    <result column="CREATE_USER_NAME" jdbcType="CHAR" property="createUserName" />
+    <result column="DATE" jdbcType="TIMESTAMP" property="date" />
+    <result column="PRICE" jdbcType="CHAR" property="price" />
+    <result column="CITY" jdbcType="CHAR" property="city" />
+    <result column="STATE" jdbcType="CHAR" property="state" />
+    <result column="NEW_TECHER" jdbcType="CHAR" property="newTecher" />
+    <result column="POP_TECHER" jdbcType="CHAR" property="popTecher" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    RID, FID, NAME, RES_CONTENT, TYPE, CREATE_USER, DATE, PRICE, CITY, STATE, NEW_TECHER, 
+    POP_TECHER
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_resource
+    where RID = #{rid,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_resource
+    where RID = #{rid,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.swinginwind.iknowu.model.Resource">
+    insert into t_resource (RID, FID, NAME, RES_CONTENT, 
+      TYPE, CREATE_USER, DATE, 
+      PRICE, CITY, STATE, NEW_TECHER, 
+      POP_TECHER)
+    values (#{rid,jdbcType=CHAR}, #{fid,jdbcType=CHAR}, #{name,jdbcType=CHAR}, #{resContent,jdbcType=CHAR}, 
+      #{type,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, 
+      #{price,jdbcType=CHAR}, #{city,jdbcType=CHAR}, #{state,jdbcType=CHAR}, #{newTecher,jdbcType=CHAR}, 
+      #{popTecher,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.swinginwind.iknowu.model.Resource">
+    insert into t_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        RID,
+      </if>
+      <if test="fid != null">
+        FID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="resContent != null">
+        RES_CONTENT,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="date != null">
+        DATE,
+      </if>
+      <if test="price != null">
+        PRICE,
+      </if>
+      <if test="city != null">
+        CITY,
+      </if>
+      <if test="state != null">
+        STATE,
+      </if>
+      <if test="newTecher != null">
+        NEW_TECHER,
+      </if>
+      <if test="popTecher != null">
+        POP_TECHER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        #{rid,jdbcType=CHAR},
+      </if>
+      <if test="fid != null">
+        #{fid,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=CHAR},
+      </if>
+      <if test="resContent != null">
+        #{resContent,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=CHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=CHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="newTecher != null">
+        #{newTecher,jdbcType=CHAR},
+      </if>
+      <if test="popTecher != null">
+        #{popTecher,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.swinginwind.iknowu.model.Resource">
+    update t_resource
+    <set>
+      <if test="fid != null">
+        FID = #{fid,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=CHAR},
+      </if>
+      <if test="resContent != null">
+        RES_CONTENT = #{resContent,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="date != null">
+        DATE = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="price != null">
+        PRICE = #{price,jdbcType=CHAR},
+      </if>
+      <if test="city != null">
+        CITY = #{city,jdbcType=CHAR},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=CHAR},
+      </if>
+      <if test="newTecher != null">
+        NEW_TECHER = #{newTecher,jdbcType=CHAR},
+      </if>
+      <if test="popTecher != null">
+        POP_TECHER = #{popTecher,jdbcType=CHAR},
+      </if>
+    </set>
+    where RID = #{rid,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.swinginwind.iknowu.model.Resource">
+    update t_resource
+    set FID = #{fid,jdbcType=CHAR},
+      NAME = #{name,jdbcType=CHAR},
+      RES_CONTENT = #{resContent,jdbcType=CHAR},
+      TYPE = #{type,jdbcType=CHAR},
+      CREATE_USER = #{createUser,jdbcType=INTEGER},
+      DATE = #{date,jdbcType=TIMESTAMP},
+      PRICE = #{price,jdbcType=CHAR},
+      CITY = #{city,jdbcType=CHAR},
+      STATE = #{state,jdbcType=CHAR},
+      NEW_TECHER = #{newTecher,jdbcType=CHAR},
+      POP_TECHER = #{popTecher,jdbcType=CHAR}
+    where RID = #{rid,jdbcType=CHAR}
+  </update>
+  
+  <select id="select" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,
+    (select t1.nick_name from t_sys_user t1 where t.create_user=t1.id) as create_user_name,
+    (select t2.name from t_dic_type t2 where t.type=t2.tid) as type_name,
+    (select t3.level from t_base_master t3 where t.create_user=t3.user_id) as master_level
+    from t_resource t
+    <where>
+      <if test="createUser != null">
+        and t.CREATE_USER = #{createUser,jdbcType=INTEGER}
+      </if>
+      <if test="startTime != null">
+        and t.DATE &gt; #{startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null">
+        and t.DATE &lt; date_add(#{endTime,jdbcType=TIMESTAMP}, interval 1 day)
+      </if>
+      <if test="states != null">
+      	and t.STATE in <foreach close=")" collection="states" index="index" item="state" open="(" separator=",">
+      	  #{state}
+    	</foreach>
+      </if>
+      <if test="types != null">
+      	and t.TYPE in <foreach close=")" collection="types" index="index" item="type" open="(" separator=",">
+      	  #{type}
+    	</foreach>
+      </if>
+      <if test="city != null and city != ''">
+      	and t.CITY like concat(#{city}, '%')
+      </if>
+      <if test="resContent != null and resContent != ''">
+      	and t.RES_CONTENT like concat('%', #{resContent}, '%')
+      </if>
+      <if test="masterName != null and masterName != ''">
+      	and t.CREATE_USER in (select USER_ID from t_base_master where MASTERNAME like concat('%', #{masterName}, '%'))
+      </if>
+      <if test="popTecher == '1'.toString()">
+      	and (select count(1) from t_base_order where t.RID = t_base_order.RESOURCE) &gt;= ${popCountLimit}
+      </if>
+      <if test="newTecher == '1'.toString()">
+        and DATE &gt;= date_add(now(), interval -${newDayLimit} day) 
+      </if>
+    </where>
+    order by 
+    <if test="popTecher == '1'.toString()">
+      (select count(1) from t_base_order where t.RID = t_base_order.RESOURCE) desc,
+    </if>
+    date desc
+  </select>
+</mapper>

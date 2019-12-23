@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.swinginwind.iknowu.dao.OrderDialogMapper" >
+  <resultMap id="BaseResultMap" type="com.swinginwind.iknowu.model.OrderDialog" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="OID" property="oid" jdbcType="CHAR" />
+    <result column="CREATE_USER" property="createUser" jdbcType="INTEGER" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OID, CREATE_USER, CREATE_DATE, CONTENT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_dialog
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_order_dialog
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.swinginwind.iknowu.model.OrderDialog" useGeneratedKeys="true" keyProperty="id">
+    insert into t_order_dialog (ID, OID, CREATE_USER, 
+      CREATE_DATE, CONTENT)
+    values (#{id,jdbcType=INTEGER}, #{oid,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.swinginwind.iknowu.model.OrderDialog" >
+    insert into t_order_dialog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="oid != null" >
+        OID,
+      </if>
+      <if test="createUser != null" >
+        CREATE_USER,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="oid != null" >
+        #{oid,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.swinginwind.iknowu.model.OrderDialog" >
+    update t_order_dialog
+    <set >
+      <if test="oid != null" >
+        OID = #{oid,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        CREATE_USER = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.swinginwind.iknowu.model.OrderDialog" >
+    update t_order_dialog
+    set OID = #{oid,jdbcType=CHAR},
+      CREATE_USER = #{createUser,jdbcType=INTEGER},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      CONTENT = #{content,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByOrderId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />,
+    (select t1.nick_name from t_sys_user t1 where t.create_user=t1.id) as create_user_name
+    from t_order_dialog t
+    where t.OID = #{oid,jdbcType=CHAR}
+  </select>
+</mapper>
