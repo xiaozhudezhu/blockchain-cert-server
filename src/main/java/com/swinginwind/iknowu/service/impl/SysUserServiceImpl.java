@@ -77,7 +77,7 @@ public class SysUserServiceImpl implements SysUserService {
 			user.setGender(user.getGender());
 			user.setWechatId(wxUser.getUnionId());
 			user.setHeadImgUrl(wxUser.getHeadImgUrl());
-			this.register(user, false);
+			this.register(user, true);
 		}
 		return user;
 	}

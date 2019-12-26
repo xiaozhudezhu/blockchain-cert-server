@@ -118,6 +118,12 @@ public class Certificate {
      */
     @SerializedName("e")
     private List<BaseFile> files;
+    
+    @SerializedName("f")
+    private String createTransaction;
+    
+    @SerializedName("g")
+    private String updateTransaction;
 
     public String getId() {
         return id;
@@ -237,5 +243,33 @@ public class Certificate {
 
 	public void setUpdateUserName(String updateUserName) {
 		this.updateUserName = updateUserName;
+	}
+
+	/**
+	 * @return the createTransaction
+	 */
+	public String getCreateTransaction() {
+		return createTransaction;
+	}
+
+	/**
+	 * @param createTransaction the createTransaction to set
+	 */
+	public void setCreateTransaction(String createTransaction) {
+		this.createTransaction = createTransaction;
+	}
+
+	/**
+	 * @return the updateTransaction
+	 */
+	public String getUpdateTransaction() {
+		return updateTransaction;
+	}
+
+	/**
+	 * @param updateTransaction the updateTransaction to set
+	 */
+	public void setUpdateTransaction(String updateTransaction) {
+		this.updateTransaction = updateTransaction;
 	}
 }

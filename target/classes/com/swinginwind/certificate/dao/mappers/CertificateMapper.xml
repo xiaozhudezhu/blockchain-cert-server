@@ -16,10 +16,12 @@
     <result column="update_user" property="updateUser" jdbcType="INTEGER" />
     <result column="update_user_name" property="updateUserName" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_transaction" property="createTransaction" jdbcType="VARCHAR" />
+    <result column="update_transaction" property="updateTransaction" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, cert_type, cert_name, cert_no, owner_name, owner_phone, owner_id, owner_email, 
-    create_user, create_time, update_user, update_time
+    create_user, create_time, update_user, update_time, create_transaction, update_transaction
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -157,6 +159,12 @@
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTransaction != null" >
+        create_transaction = #{createTransaction,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTransaction != null" >
+        update_transaction = #{updateTransaction,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}

@@ -112,7 +112,7 @@ public class LoginController {
 	public JSONResponse register(@RequestBody SysUser user) {
 		JSONResponse res = new JSONResponse();
 		try {
-			userService.register(user, false);
+			userService.register(user, true);
 			res.setMsg("注册成功");
 		} catch (Exception e) {
 			res.setStatusAndMsg(false, "注册失败," + e.getMessage());

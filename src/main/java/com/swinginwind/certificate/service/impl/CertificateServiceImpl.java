@@ -2,9 +2,11 @@ package com.swinginwind.certificate.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.swinginwind.blockchain.util.Web3jUtil;
 import com.swinginwind.certificate.dao.CertificateMapper;
 import com.swinginwind.certificate.model.Certificate;
 import com.swinginwind.certificate.pager.CertificatePager;
@@ -12,6 +14,7 @@ import com.swinginwind.certificate.service.CertificateService;
 import com.swinginwind.core.utils.Identities;
 import com.swinginwind.iknowu.dao.BaseFileMapper;
 import com.swinginwind.iknowu.model.BaseFile;
+import com.swinginwind.iknowu.model.SysUser;
 import com.swinginwind.iknowu.service.SysUserService;
 
 @Service
@@ -25,6 +28,9 @@ public class CertificateServiceImpl implements CertificateService {
 	
 	@Autowired
 	private CertificateMapper certMapper;
+	
+	@Autowired
+	private Web3jUtil web3jUtil;
 
 	@Override
 	public int insert(Certificate cert) {
@@ -42,7 +48,29 @@ public class CertificateServiceImpl implements CertificateService {
 				fileMapper.updateByPrimaryKeySelective(file);
 			}
 		}
-		return certMapper.insert(cert);
+		int result = certMapper.insert(cert);
+		if(result == 1) {
+			SysUser user = userService.getCurrentUser();
+			if(!StringUtils.isEmpty(user.getWalletAccount()) 
+					&& !StringUtils.isEmpty(user.getWalletPwd())) {
+				new Thread(new Runnable() {
+				    @Override
+				    public void run() {
+						try {
+							String hash = web3jUtil.createCertificate(cert, user.getWalletAccount(), user.getWalletPwd());
+							Certificate certTemp = new Certificate();
+							certTemp.setId(cert.getId());
+							certTemp.setCreateTransaction(hash);
+							certMapper.updateByPrimaryKeySelective(certTemp);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				    }
+				}).start();
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -51,6 +79,8 @@ public class CertificateServiceImpl implements CertificateService {
 		cert.setUpdateUser(userService.getCurrentUser().getId());
 		cert.setCreateUser(null);
 		cert.setCreateTime(null);
+		cert.setCreateTransaction(null);
+		cert.setUpdateTransaction(null);
 		fileMapper.deleteUnusedFilesWhenUpdate(cert.getId(), "CERT_FILE", cert.getFiles());
 		if(cert.getFiles() != null && cert.getFiles().size() > 0) {
 			for(int i = 0; i < cert.getFiles().size(); i ++) {
@@ -61,7 +91,29 @@ public class CertificateServiceImpl implements CertificateService {
 				fileMapper.updateByPrimaryKeySelective(file);
 			}
 		}
-		return certMapper.updateByPrimaryKeySelective(cert);
+		int result = certMapper.updateByPrimaryKeySelective(cert);
+		if(result == 1) {
+			SysUser user = userService.getCurrentUser();
+			if(!StringUtils.isEmpty(user.getWalletAccount()) 
+					&& !StringUtils.isEmpty(user.getWalletPwd())) {
+				new Thread(new Runnable() {
+				    @Override
+				    public void run() {
+						try {
+							String hash = web3jUtil.updateCertificate(cert, user.getWalletAccount(), user.getWalletPwd());
+							Certificate certTemp = new Certificate();
+							certTemp.setId(cert.getId());
+							certTemp.setUpdateTransaction(hash);
+							certMapper.updateByPrimaryKeySelective(certTemp);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				    }
+				}).start();
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -77,7 +129,25 @@ public class CertificateServiceImpl implements CertificateService {
 
 	@Override
 	public int delete(Certificate cert) {
-		return certMapper.deleteByPrimaryKey(cert.getId());
+		int result = certMapper.deleteByPrimaryKey(cert.getId());
+		if(result == 1) {
+			SysUser user = userService.getCurrentUser();
+			if(!StringUtils.isEmpty(user.getWalletAccount()) 
+					&& !StringUtils.isEmpty(user.getWalletPwd())) {
+				new Thread(new Runnable() {
+				    @Override
+				    public void run() {
+						try {
+							String hash = web3jUtil.deleteCertificate(cert.getId(), user.getWalletAccount(), user.getWalletPwd());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				    }
+				}).start();
+			}
+		}
+		return result;
 	}
 
 	@Override

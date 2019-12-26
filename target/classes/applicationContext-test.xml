@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
+     http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd 
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+	
+	
+	<!-- 读取配置文件 -->
+	<context:property-placeholder location="classpath*:*.properties"
+		ignore-resource-not-found="true" />
+	
+	<bean class="com.swinginwind.blockchain.util.Web3jUtil">
+		<property name="url" value="${blockchain.url}" />
+		<property name="tokenAddress" value="${blockchain.tokenAddress}" />
+		<property name="keystoreFolder" value="${blockchain.keystoreFolder}" />
+		<property name="gasLimit" value="${blockchain.gasLimit}" />
+		<property name="gasPrice" value="${blockchain.gasPrice}" />
+		<property name="adminAccount" value="${blockchain.adminAccount}" />
+		<property name="adminPwd" value="${blockchain.adminPwd}" />
+		<property name="userInitBalance" value="${blockchain.userInitBalance}" />
+	</bean>
+	
+
+</beans>

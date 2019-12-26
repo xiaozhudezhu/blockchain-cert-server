@@ -21,7 +21,7 @@ import com.swinginwind.certificate.model.Certificate;
 import com.swinginwind.core.utils.Identities;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath*:applicationContext.xml" })
+@ContextConfiguration({ "classpath*:applicationContext-test.xml" })
 public class BlockChainTest {
 
 	@Autowired
@@ -81,15 +81,16 @@ public class BlockChainTest {
 				//.split(",");
 		//System.out.println(toArray.length);
 		System.out.println("Accounts: " + web3jUtil.getAccounts());
-		System.out.println("XTT Balance: " + web3jUtil.getCertBalance(web3jUtil.getAccounts().get(0)));
+		System.out.println("XTT Balance: " + web3jUtil.getCertBalance(web3jUtil.getAccounts().get(1)));
 		Certificate certificate = new Certificate();
 		certificate.setCertName("123");
-		certificate.setId("22222222222222222222222222222222");
+		certificate.setId("1e48868390b64bb2ae6b5a74f0bd8c0c");
 		//System.out.println(web3jUtil.updateCertificate(certificate, web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));
 		//System.out.println(web3jUtil.getCreateCertificateEvents("0x821c6efdd0e49fe9fcdc57a83e0eda1f6975ef8fc1b7aecb3ae2e9abdd47b808"));
-		System.out.println(web3jUtil.deleteCertificate(certificate.getId(), web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));
+		//System.out.println(web3jUtil.deleteCertificate(certificate.getId(), web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));
 		//System.out.println(web3jUtil.increSupply(new BigInteger("1000"), web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));
-		System.out.println(web3jUtil.getCertificate(certificate.getId()));
+		//System.out.println(web3jUtil.getCertificate(certificate.getId()));
+		//System.out.println(web3jUtil.createWallet("123"));
 		//System.out.println("ETH Balance: " + web3jUtil.getBalance(from));
 		/*System.out.println("Transaction: "
 				+ web3jUtil.sendUFOTransaction(from, "0x81824cd167b903cd7049980aef106586157630e2", pwd, amount));*/
