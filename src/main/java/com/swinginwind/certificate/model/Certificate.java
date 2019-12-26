@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.google.gson.annotations.SerializedName;
 import com.swinginwind.iknowu.model.BaseFile;
 
 public class Certificate {
@@ -13,6 +14,7 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : id
      */
+	@SerializedName("0")
     private String id;
 
     /**
@@ -20,6 +22,7 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : cert_type
      */
+	@SerializedName("1")
     private Integer certType;
 
     /**
@@ -27,6 +30,7 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : cert_name
      */
+    @SerializedName("2")
     private String certName;
 
     /**
@@ -34,6 +38,7 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : cert_no
      */
+    @SerializedName("3")
     private String certNo;
 
     /**
@@ -41,6 +46,7 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : owner_name
      */
+    @SerializedName("4")
     private String ownerName;
 
     /**
@@ -48,6 +54,7 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : owner_phone
      */
+    @SerializedName("5")
     private String ownerPhone;
 
     /**
@@ -55,6 +62,7 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : owner_id
      */
+    @SerializedName("6")
     private String ownerId;
 
     /**
@@ -62,6 +70,7 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : owner_email
      */
+    @SerializedName("7")
     private String ownerEmail;
 
     /**
@@ -69,8 +78,10 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : create_user
      */
+    @SerializedName("8")
     private Integer createUser;
     
+    @SerializedName("9")
     private String createUserName;
 
     /**
@@ -78,6 +89,7 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : create_time
      */
+    @SerializedName("a")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
@@ -86,8 +98,10 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : update_user
      */
+    @SerializedName("b")
     private Integer updateUser;
     
+    @SerializedName("c")
     private String updateUserName;
 
     /**
@@ -95,12 +109,14 @@ public class Certificate {
      * 表 : t_certificate
      * 对应字段 : update_time
      */
+    @SerializedName("d")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     
     /**
      * 附件
      */
+    @SerializedName("e")
     private List<BaseFile> files;
 
     public String getId() {

@@ -80,7 +80,7 @@
 	
 	<bean class="com.swinginwind.blockchain.util.Web3jUtil">
 		<property name="url" value="${blockchain.url}" />
-		<property name="ufoTokenAddress" value="${blockchain.ufoTokenAddress}" />
+		<property name="tokenAddress" value="${blockchain.tokenAddress}" />
 		<property name="keystoreFolder" value="${blockchain.keystoreFolder}" />
 		<property name="gasLimit" value="${blockchain.gasLimit}" />
 		<property name="gasPrice" value="${blockchain.gasPrice}" />

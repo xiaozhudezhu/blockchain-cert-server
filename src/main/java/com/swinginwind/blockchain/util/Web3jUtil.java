@@ -3,13 +3,9 @@ package com.swinginwind.blockchain.util;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +18,6 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.admin.Admin;
@@ -43,9 +38,14 @@ import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.RawTransactionManager;
 
-import com.swinginwind.blockchain.token.Ufo;
-import com.swinginwind.blockchain.token.Ufo.TransferEventResponse;
-import com.swinginwind.blockchain.token.Ufo.TransferWithOrderEventResponse;
+import com.google.gson.Gson;
+import com.swinginwind.blockchain.token.Cert;
+import com.swinginwind.blockchain.token.Cert.CreateCertificateEventResponse;
+import com.swinginwind.blockchain.token.Cert.TransferEventResponse;
+import com.swinginwind.blockchain.token.Cert.TransferWithOrderEventResponse;
+import com.swinginwind.blockchain.token.Cert.UpdateCertificateEventResponse;
+import com.swinginwind.certificate.model.Certificate;
+import com.swinginwind.core.utils.ZipUtils;
 
 import rx.functions.Action1;
 
@@ -63,9 +63,9 @@ public class Web3jUtil {
 	private String url = "http://193.112.206.28:8545";
 
 	/**
-	 * UFO token地址
+	 * Cert token地址
 	 */
-	private String ufoTokenAddress = "0x4E8d21306551b0D131B2FCCeEA4e640e5aeC436E";
+	private String tokenAddress = "0x4E8d21306551b0D131B2FCCeEA4e640e5aeC436E";
 
 	/**
 	 * geth keystore目录
@@ -75,11 +75,11 @@ public class Web3jUtil {
 	/**
 	 * gasLimit
 	 */
-	private long gasLimit = 100000;
+	private long gasLimit = 1000000;
 	/**
 	 * gasPrice
 	 */
-	private long gasPrice = 10000L;
+	private long gasPrice = 100000L;
 
 	private String adminAccount;
 
@@ -90,7 +90,7 @@ public class Web3jUtil {
 	private Admin web3;
 
 	public void init() {
-		Ufo contract = Ufo.load(ufoTokenAddress, getWeb3Client(), Credentials.create(ufoTokenAddress),
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), Credentials.create(tokenAddress),
 				BigInteger.valueOf(100000), BigInteger.valueOf(100000));
 		contract.transferEventObservable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
 				.subscribe(new Action1<TransferEventResponse>() {
@@ -106,6 +106,13 @@ public class Web3jUtil {
 						System.out.println(log.toString());
 					}
 				});
+		contract.createCertificateEventObservable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
+		.subscribe(new Action1<CreateCertificateEventResponse>() {
+			@Override
+			public void call(CreateCertificateEventResponse log) {
+				System.out.println(log.toString());
+			}
+		});
 	}
 
 	public Admin getWeb3Client() {
@@ -276,35 +283,149 @@ public class Web3jUtil {
 	}
 
 	/**
-	 * 获取UFO货币标志
+	 * 获取Cert货币标志
 	 * 
 	 * @return 货币标志
 	 * @throws Exception
 	 */
-	public String getUFOSymbol() throws Exception {
-		Ufo contract = Ufo.load(ufoTokenAddress, getWeb3Client(), Credentials.create(ufoTokenAddress),
+	public String getCertSymbol() throws Exception {
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), Credentials.create(tokenAddress),
 				BigInteger.valueOf(100000), BigInteger.valueOf(100000));
 		String balanceToken = contract.symbol().send();
 		return balanceToken;
 	}
 
 	/**
-	 * 获取UFO币余额
+	 * 获取Cert币余额
 	 * 
 	 * @param addr
 	 *            地址
-	 * @return UFO余额
+	 * @return Cert余额
 	 * @throws Exception
 	 */
-	public BigInteger getUFOBalance(String addr) throws Exception {
-		Ufo contract = Ufo.load(ufoTokenAddress, getWeb3Client(), Credentials.create(ufoTokenAddress),
+	public BigInteger getCertBalance(String addr) throws Exception {
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), Credentials.create(tokenAddress),
 				BigInteger.valueOf(100000), BigInteger.valueOf(100000));
 		BigInteger balanceToken = contract.balanceOf(addr).send();
 		return balanceToken;
 	}
+	
+	public String createCertificate(Certificate cert, String from, String pwd) throws Exception {
+		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
+				BigInteger.valueOf(gasLimit));
+		TransactionReceipt tr = null;
+		try {
+			tr = contract.createCertificate(cert.getId().getBytes(), ZipUtils.gzip(new Gson().toJson(cert))).send();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (tr != null)
+			return tr.getTransactionHash();
+		return null;
+	}
+	
+	public List<CreateCertificateEventResponse> getCreateCertificateEvents(String txHash) {
+		Credentials credentials = Credentials.create(tokenAddress);
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
+				BigInteger.valueOf(gasLimit));
+		try {
+			EthGetTransactionReceipt etr = getWeb3Client().ethGetTransactionReceipt(txHash).send();
+			TransactionReceipt tr = etr.getResult();
+			if (tr != null) {
+				List<CreateCertificateEventResponse> result = contract.getCreateCertificateEvents(tr);
+				return result;
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public String updateCertificate(Certificate cert, String from, String pwd) throws Exception {
+		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
+				BigInteger.valueOf(gasLimit));
+		TransactionReceipt tr = null;
+		try {
+			tr = contract.updateCertificate(cert.getId().getBytes(), ZipUtils.gzip(new Gson().toJson(cert))).send();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (tr != null)
+			return tr.getTransactionHash();
+		return null;
+	}
+	
+	public List<UpdateCertificateEventResponse> getUpdateCertificateEvents(String txHash) {
+		Credentials credentials = Credentials.create(tokenAddress);
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
+				BigInteger.valueOf(gasLimit));
+		try {
+			EthGetTransactionReceipt etr = getWeb3Client().ethGetTransactionReceipt(txHash).send();
+			TransactionReceipt tr = etr.getResult();
+			if (tr != null) {
+				List<UpdateCertificateEventResponse> result = contract.getUpdateCertificateEvents(tr);
+				return result;
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public String deleteCertificate(String id, String from, String pwd) throws Exception {
+		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
+				BigInteger.valueOf(gasLimit));
+		TransactionReceipt tr = null;
+		try {
+			tr = contract.deleteCertificate(id.getBytes()).send();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (tr != null)
+			return tr.getTransactionHash();
+		return null;
+	}
+	
+	public Certificate getCertificate(String id) throws Exception {
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), Credentials.create(tokenAddress), BigInteger.valueOf(gasPrice),
+				BigInteger.valueOf(gasLimit));
+		byte[] result = null;
+		Certificate cert = null;
+		try {
+			result = contract.getCertificate(id.getBytes()).send();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(result != null) {
+			String str = ZipUtils.gunzip(result);
+			cert = new Gson().fromJson(str, Certificate.class);
+		}
+		return cert;
+	}
+	
+	public String increSupply(BigInteger value, String from, String pwd) throws Exception {
+		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
+				BigInteger.valueOf(gasLimit));
+		TransactionReceipt tr = null;
+		try {
+			tr = contract.increSupply(value).send();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (tr != null)
+			return tr.getTransactionHash();
+		return null;
+	}
+	
 
 	/**
-	 * 发送UFO交易
+	 * 发送Cert交易
 	 * 
 	 * @param from
 	 *            源账号
@@ -317,9 +438,9 @@ public class Web3jUtil {
 	 * @return 交易码
 	 * @throws Exception
 	 */
-	public String sendUFOTransaction(String from, String to, String pwd, BigInteger amount) throws Exception {
+	public String sendCertTransaction(String from, String to, String pwd, BigInteger amount) throws Exception {
 		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
-		Ufo contract = Ufo.load(ufoTokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
 				BigInteger.valueOf(gasLimit));
 		TransactionReceipt tr = null;
 		try {
@@ -338,55 +459,20 @@ public class Web3jUtil {
 	}
 
 	/**
-	 * 发送UFO交易（含业务订单号）
-	 * 
-	 * @param from
-	 *            源账号
-	 * @param to
-	 *            目标账号
-	 * @param pwd
-	 *            密码
-	 * @param amount
-	 *            金额
-	 * @param orderNo
-	 *            业务订单号
-	 * @return 交易码
-	 * @throws Exception
-	 */
-	public String sendUFOTransactionWithOrder(String from, String to, String pwd, BigInteger amount, String orderNo)
-			throws Exception {
-		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
-		Ufo contract = Ufo.load(ufoTokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
-				BigInteger.valueOf(gasLimit));
-		EthSendTransaction tr = null;
-		try {
-			getWeb3Client().personalUnlockAccount(from, pwd).send();
-			orderNo = StringUtils.leftPad(orderNo, 32);
-			tr = contract.transferWithOrder(orderNo.getBytes(), to, pwd, amount).send();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (tr != null)
-			return tr.getTransactionHash();
-		return null;
-
-	}
-
-	/**
 	 * 根据交易Hash查询交易详情
 	 * 
 	 * @param txHash
 	 * @return 交易详情
 	 * @throws Exception
 	 */
-	public UfoTransaction getUFOTxDetailByHash(String txHash) throws Exception {
-		Credentials credentials = Credentials.create(ufoTokenAddress);
-		Ufo contract = Ufo.load(ufoTokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
+	public CertTransaction getCertTxDetailByHash(String txHash) throws Exception {
+		Credentials credentials = Credentials.create(tokenAddress);
+		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
 				BigInteger.valueOf(gasLimit));
 		EthGetTransactionReceipt etr = getWeb3Client().ethGetTransactionReceipt(txHash).send();
 		TransactionReceipt tr = etr.getResult();
 		if (tr != null) {
-			UfoTransaction tx = new UfoTransaction();
+			CertTransaction tx = new CertTransaction();
 			BeanUtils.copyProperties(tr, tx);
 			List<TransferWithOrderEventResponse> response1 = contract.getTransferWithOrderEvents(tr);
 			if (response1 != null && response1.size() > 0) {
@@ -416,12 +502,12 @@ public class Web3jUtil {
 	 * @return 交易列表
 	 * @throws Exception
 	 */
-	public List<UfoTransaction> getUFOTxsByAccount(String account) throws Exception {
-		List<UfoTransaction> result = new ArrayList<UfoTransaction>();
-		List<LogResult> logs = getUFOTansferEvents("0x" + TypeEncoder.encode(new Address(account)));
+	public List<CertTransaction> getCertTxsByAccount(String account) throws Exception {
+		List<CertTransaction> result = new ArrayList<CertTransaction>();
+		List<LogResult> logs = getCertTansferEvents("0x" + TypeEncoder.encode(new Address(account)));
 		if (logs != null && logs.size() > 0) {
 			for(LogResult log : logs) {
-				UfoTransaction tx = getUFOTxDetailByHash(((Log) log).getTransactionHash());
+				CertTransaction tx = getCertTxDetailByHash(((Log) log).getTransactionHash());
 				if(tx != null) {
 					tx.setLogs(null);
 					result.add(tx);
@@ -439,25 +525,25 @@ public class Web3jUtil {
 	 * @return 交易详情
 	 * @throws Exception
 	 */
-	public UfoTransaction getUFOTxDetailByOrderNo(String orderNo) throws Exception {
+	public CertTransaction getCertTxDetailByOrderNo(String orderNo) throws Exception {
 		orderNo = StringUtils.leftPad(orderNo, 32);
-		List<LogResult> logs = getUFOTansferWithOrderEvents(strTo16(orderNo));
+		List<LogResult> logs = getCertTansferWithOrderEvents(strTo16(orderNo));
 		if (logs != null && logs.size() > 0) {
 			Log logObject = (Log) logs.get(0);
-			return getUFOTxDetailByHash(logObject.getTransactionHash());
+			return getCertTxDetailByHash(logObject.getTransactionHash());
 		}
 		return null;
 	}
 	
 	
 
-	private List<LogResult> getUFOTansferEvents(String param) {
+	private List<LogResult> getCertTansferEvents(String param) {
 		Event event = new Event("Transfer", Arrays.<TypeReference<?>> asList(new TypeReference<Address>() {
 		}, new TypeReference<Address>() {
 		}), Arrays.<TypeReference<?>> asList(new TypeReference<Uint256>() {
 		}));
 		EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST,
-				this.getUfoTokenAddress());
+				this.getTokenAddress());
 		filter.addSingleTopic(EventEncoder.encode(event));
 		EthLog log;
 		try {
@@ -478,14 +564,14 @@ public class Web3jUtil {
 		return null;
 	}
 
-	public List<LogResult> getUFOTansferWithOrderEvents(String param) {
+	public List<LogResult> getCertTansferWithOrderEvents(String param) {
 		Event event = new Event("TransferWithOrder", Arrays.<TypeReference<?>> asList(new TypeReference<Bytes32>() {
 		}, new TypeReference<Address>() {
 		}, new TypeReference<Address>() {
 		}), Arrays.<TypeReference<?>> asList(new TypeReference<Uint256>() {
 		}));
 		EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST,
-				this.getUfoTokenAddress());
+				this.getTokenAddress());
 		filter.addSingleTopic(EventEncoder.encode(event));
 		EthLog log;
 		try {
@@ -533,12 +619,12 @@ public class Web3jUtil {
 		this.url = url;
 	}
 
-	public String getUfoTokenAddress() {
-		return ufoTokenAddress;
+	public String getTokenAddress() {
+		return tokenAddress;
 	}
 
-	public void setUfoTokenAddress(String ufoTokenAddress) {
-		this.ufoTokenAddress = ufoTokenAddress;
+	public void setTokenAddress(String tokenAddress) {
+		this.tokenAddress = tokenAddress;
 	}
 
 	public String getKeystoreFolder() {
@@ -589,7 +675,7 @@ public class Web3jUtil {
 		this.adminPwd = adminPwd;
 	}
 
-	public static class UfoTransaction {
+	public static class CertTransaction {
 
 		/**
 		 * 交易Hash

@@ -37,44 +37,36 @@ public class BlockChainController {
 	}
 	
 	
-	@RequestMapping("getUFOBalance")
+	@RequestMapping("getCertBalance")
 	@ResponseBody
-	public JSONResponse getUFOBalance(String addr) throws Exception {
+	public JSONResponse getCertBalance(String addr) throws Exception {
 		JSONResponse res = new JSONResponse();
-		res.put("balance", web3jUtil.getUFOBalance(addr));
-		res.put("symbol", web3jUtil.getUFOSymbol());
+		res.put("balance", web3jUtil.getCertBalance(addr));
+		res.put("symbol", web3jUtil.getCertSymbol());
 		return res;
 	}
 	
-	@RequestMapping("sendUFOTransaction")
+	@RequestMapping("sendCertTransaction")
 	@ResponseBody
-	public JSONResponse sendUFOTransaction(String from, String to, String pwd, BigInteger amount) throws Exception {
+	public JSONResponse sendCertTransaction(String from, String to, String pwd, BigInteger amount) throws Exception {
 		JSONResponse res = new JSONResponse();
-		res.put("transaction", web3jUtil.sendUFOTransaction(from, to, pwd, amount));
+		res.put("transaction", web3jUtil.sendCertTransaction(from, to, pwd, amount));
 		return res;
 	}
 	
-	@RequestMapping("sendUFOTransactionWithOrder")
+	@RequestMapping("getCertTxDetailByHash")
 	@ResponseBody
-	public JSONResponse sendUFOTransactionWithOrder(String from, String to, String pwd, BigInteger amount, String orderNo) throws Exception {
+	public JSONResponse getCertTxDetailByHash(String txHash) throws Exception {
 		JSONResponse res = new JSONResponse();
-		res.put("transaction", web3jUtil.sendUFOTransactionWithOrder(from, to, pwd, amount, orderNo));
+		res.put("transaction", web3jUtil.getCertTxDetailByHash(txHash));
 		return res;
 	}
 	
-	@RequestMapping("getUFOTxDetailByHash")
+	@RequestMapping("getCertTxDetailByOrderNo")
 	@ResponseBody
-	public JSONResponse getUFOTxDetailByHash(String txHash) throws Exception {
+	public JSONResponse getCertTansferEvents(String orderNo) throws Exception {
 		JSONResponse res = new JSONResponse();
-		res.put("transaction", web3jUtil.getUFOTxDetailByHash(txHash));
-		return res;
-	}
-	
-	@RequestMapping("getUFOTxDetailByOrderNo")
-	@ResponseBody
-	public JSONResponse getUFOTansferEvents(String orderNo) throws Exception {
-		JSONResponse res = new JSONResponse();
-		res.put("transaction", web3jUtil.getUFOTxDetailByOrderNo(orderNo));
+		res.put("transaction", web3jUtil.getCertTxDetailByOrderNo(orderNo));
 		return res;
 	}
 

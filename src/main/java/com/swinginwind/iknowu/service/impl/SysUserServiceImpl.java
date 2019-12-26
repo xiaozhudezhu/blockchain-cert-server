@@ -88,7 +88,7 @@ public class SysUserServiceImpl implements SysUserService {
 		if (user != null)
 			return user;
 		else {
-			this.register(user1, false);
+			this.register(user1, true);
 			user = user1;
 		}
 		return user;
@@ -106,7 +106,7 @@ public class SysUserServiceImpl implements SysUserService {
 			String account = web3jUtil.newAccount(user.getWalletPwd());
 			user.setWalletAccount(account);
 			// 初始化余额
-			web3jUtil.sendUFOTransaction(web3jUtil.getAdminAccount(), account, web3jUtil.getAdminPwd(),
+			web3jUtil.sendCertTransaction(web3jUtil.getAdminAccount(), account, web3jUtil.getAdminPwd(),
 					web3jUtil.getUserInitBalance());
 		}
 		userMapper.insert(user);
