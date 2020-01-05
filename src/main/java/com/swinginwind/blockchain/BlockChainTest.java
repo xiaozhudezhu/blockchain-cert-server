@@ -81,8 +81,8 @@ public class BlockChainTest {
 				//.split(",");
 		//System.out.println(toArray.length);
 		System.out.println("Accounts: " + web3jUtil.getAccounts());
-		System.out.println("XTT Balance: " + web3jUtil.getCertBalance(web3jUtil.getAccounts().get(1)));
-		Certificate certificate = new Certificate();
+/*		System.out.println("XTT Balance: " + web3jUtil.getCertBalance(web3jUtil.getAccounts().get(1)));
+*/		Certificate certificate = new Certificate();
 		certificate.setCertName("123");
 		certificate.setId("1e48868390b64bb2ae6b5a74f0bd8c0c");
 		//System.out.println(web3jUtil.updateCertificate(certificate, web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));

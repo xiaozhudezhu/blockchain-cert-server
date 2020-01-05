@@ -106,8 +106,8 @@ public class SysUserServiceImpl implements SysUserService {
 			String account = web3jUtil.newAccount(user.getWalletPwd());
 			user.setWalletAccount(account);
 			// 初始化余额
-			web3jUtil.sendCertTransaction(web3jUtil.getAdminAccount(), account, web3jUtil.getAdminPwd(),
-					web3jUtil.getUserInitBalance());
+			/*web3jUtil.sendCertTransaction(web3jUtil.getAdminAccount(), account, web3jUtil.getAdminPwd(),
+					web3jUtil.getUserInitBalance());*/
 		}
 		userMapper.insert(user);
 		this.createUserQrCode(user);

@@ -37,7 +37,7 @@ public class BlockChainController {
 	}
 	
 	
-	@RequestMapping("getCertBalance")
+	/*@RequestMapping("getCertBalance")
 	@ResponseBody
 	public JSONResponse getCertBalance(String addr) throws Exception {
 		JSONResponse res = new JSONResponse();
@@ -68,6 +68,6 @@ public class BlockChainController {
 		JSONResponse res = new JSONResponse();
 		res.put("transaction", web3jUtil.getCertTxDetailByOrderNo(orderNo));
 		return res;
-	}
+	}*/
 
 }

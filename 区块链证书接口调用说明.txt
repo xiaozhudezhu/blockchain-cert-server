@@ -291,6 +291,7 @@ HTTP方法：POST
 	"ownerPhone": "11111111111",              //所有人电话
 	"ownerId": "123",                         //所有人身份证
 	"ownerEmail": "1",                        //所有人邮箱
+	"createUser": 1,                          //创建人ID
 	"pageNum": 1,                             //当前页码，分页用，默认1
 	"pageSize": 15                            //每页记录条数，分页用，默认15
 }

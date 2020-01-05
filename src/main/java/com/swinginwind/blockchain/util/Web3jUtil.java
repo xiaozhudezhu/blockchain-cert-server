@@ -41,8 +41,8 @@ import org.web3j.tx.RawTransactionManager;
 import com.google.gson.Gson;
 import com.swinginwind.blockchain.token.Cert;
 import com.swinginwind.blockchain.token.Cert.CreateCertificateEventResponse;
-import com.swinginwind.blockchain.token.Cert.TransferEventResponse;
-import com.swinginwind.blockchain.token.Cert.TransferWithOrderEventResponse;
+/*import com.swinginwind.blockchain.token.Cert.TransferEventResponse;
+import com.swinginwind.blockchain.token.Cert.TransferWithOrderEventResponse;*/
 import com.swinginwind.blockchain.token.Cert.UpdateCertificateEventResponse;
 import com.swinginwind.certificate.model.Certificate;
 import com.swinginwind.core.utils.ZipUtils;
@@ -92,7 +92,7 @@ public class Web3jUtil {
 	public void init() {
 		Cert contract = Cert.load(tokenAddress, getWeb3Client(), Credentials.create(tokenAddress),
 				BigInteger.valueOf(100000), BigInteger.valueOf(100000));
-		contract.transferEventObservable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
+		/*contract.transferEventObservable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
 				.subscribe(new Action1<TransferEventResponse>() {
 					@Override
 					public void call(TransferEventResponse log) {
@@ -105,7 +105,7 @@ public class Web3jUtil {
 					public void call(TransferWithOrderEventResponse log) {
 						System.out.println(log.toString());
 					}
-				});
+				});*/
 		contract.createCertificateEventObservable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
 		.subscribe(new Action1<CreateCertificateEventResponse>() {
 			@Override
@@ -288,12 +288,12 @@ public class Web3jUtil {
 	 * @return 货币标志
 	 * @throws Exception
 	 */
-	public String getCertSymbol() throws Exception {
+	/*public String getCertSymbol() throws Exception {
 		Cert contract = Cert.load(tokenAddress, getWeb3Client(), Credentials.create(tokenAddress),
 				BigInteger.valueOf(100000), BigInteger.valueOf(100000));
 		String balanceToken = contract.symbol().send();
 		return balanceToken;
-	}
+	}*/
 
 	/**
 	 * 获取Cert币余额
@@ -303,12 +303,12 @@ public class Web3jUtil {
 	 * @return Cert余额
 	 * @throws Exception
 	 */
-	public BigInteger getCertBalance(String addr) throws Exception {
+/*	public BigInteger getCertBalance(String addr) throws Exception {
 		Cert contract = Cert.load(tokenAddress, getWeb3Client(), Credentials.create(tokenAddress),
 				BigInteger.valueOf(100000), BigInteger.valueOf(100000));
 		BigInteger balanceToken = contract.balanceOf(addr).send();
 		return balanceToken;
-	}
+	}*/
 	
 	public String createCertificate(Certificate cert, String from, String pwd) throws Exception {
 		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
@@ -408,7 +408,7 @@ public class Web3jUtil {
 		return cert;
 	}
 	
-	public String increSupply(BigInteger value, String from, String pwd) throws Exception {
+	/*public String increSupply(BigInteger value, String from, String pwd) throws Exception {
 		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
 		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
 				BigInteger.valueOf(gasLimit));
@@ -421,7 +421,7 @@ public class Web3jUtil {
 		if (tr != null)
 			return tr.getTransactionHash();
 		return null;
-	}
+	}*/
 	
 
 	/**
@@ -438,16 +438,16 @@ public class Web3jUtil {
 	 * @return 交易码
 	 * @throws Exception
 	 */
-	public String sendCertTransaction(String from, String to, String pwd, BigInteger amount) throws Exception {
+	/*public String sendCertTransaction(String from, String to, String pwd, BigInteger amount) throws Exception {
 		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
 		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
 				BigInteger.valueOf(gasLimit));
 		TransactionReceipt tr = null;
 		try {
 			// getWeb3Client().personalUnlockAccount(from, pwd).send();
-			/*contract.transfer(to, amount).sendAsync().whenComplete((s, e) -> {
+			contract.transfer(to, amount).sendAsync().whenComplete((s, e) -> {
                 s.
-            });*/
+            });
 			tr = contract.transfer(to, amount).send();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -456,7 +456,7 @@ public class Web3jUtil {
 			return tr.getTransactionHash();
 		return null;
 
-	}
+	}*/
 
 	/**
 	 * 根据交易Hash查询交易详情
@@ -464,7 +464,7 @@ public class Web3jUtil {
 	 * @param txHash
 	 * @return 交易详情
 	 * @throws Exception
-	 */
+	 *//*
 	public CertTransaction getCertTxDetailByHash(String txHash) throws Exception {
 		Credentials credentials = Credentials.create(tokenAddress);
 		Cert contract = Cert.load(tokenAddress, getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
@@ -492,7 +492,7 @@ public class Web3jUtil {
 			return tx;
 		}
 		return null;
-	}
+	}*/
 
 	/**
 	 * 根据账户查询交易列表
@@ -502,7 +502,7 @@ public class Web3jUtil {
 	 * @return 交易列表
 	 * @throws Exception
 	 */
-	public List<CertTransaction> getCertTxsByAccount(String account) throws Exception {
+	/*public List<CertTransaction> getCertTxsByAccount(String account) throws Exception {
 		List<CertTransaction> result = new ArrayList<CertTransaction>();
 		List<LogResult> logs = getCertTansferEvents("0x" + TypeEncoder.encode(new Address(account)));
 		if (logs != null && logs.size() > 0) {
@@ -515,7 +515,7 @@ public class Web3jUtil {
 			}
 		}
 		return result;
-	}
+	}*/
 	
 	/**
 	 * 根据业务订单号查询交易详情
@@ -525,7 +525,7 @@ public class Web3jUtil {
 	 * @return 交易详情
 	 * @throws Exception
 	 */
-	public CertTransaction getCertTxDetailByOrderNo(String orderNo) throws Exception {
+	/*public CertTransaction getCertTxDetailByOrderNo(String orderNo) throws Exception {
 		orderNo = StringUtils.leftPad(orderNo, 32);
 		List<LogResult> logs = getCertTansferWithOrderEvents(strTo16(orderNo));
 		if (logs != null && logs.size() > 0) {
@@ -533,7 +533,7 @@ public class Web3jUtil {
 			return getCertTxDetailByHash(logObject.getTransactionHash());
 		}
 		return null;
-	}
+	}*/
 	
 	
 
