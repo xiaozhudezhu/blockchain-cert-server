@@ -1,6 +1,9 @@
 package com.swinginwind.certificate.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.swinginwind.certificate.model.Certificate;
 import com.swinginwind.certificate.pager.CertificatePager;
@@ -71,6 +75,24 @@ public class CertificateController {
 	public JqgridResponse<Certificate> search(@RequestBody CertificatePager pager) {
 		certificateService.select(pager);
 		JqgridResponse<Certificate> res = new JqgridResponse<Certificate>(pager);
+		return res;
+	}
+	
+	@RequestMapping(value = "batchImport", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONResponse batchImport(HttpServletRequest request, HttpServletResponse response, MultipartFile file) {
+		JSONResponse res = new JSONResponse();
+		if (file != null) {
+			try {
+				List<Certificate> certList = certificateService.batchImport(request, file);
+				res.put("certList", certList);
+			} catch (Exception e) {
+				res.setStatusAndMsg(false, e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		else
+			res.setStatusAndMsg(false, "文件不能为空");
 		return res;
 	}
 	

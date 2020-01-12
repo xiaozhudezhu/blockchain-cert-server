@@ -23,6 +23,7 @@ import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthAccounts;
@@ -406,6 +407,14 @@ public class Web3jUtil {
 			cert = new Gson().fromJson(str, Certificate.class);
 		}
 		return cert;
+	}
+	
+	public String deployCert(String from, String pwd) throws Exception {
+		Credentials credentials = WalletUtils.loadCredentials(pwd, getKeystoreFilePath(from));
+		Cert result = Cert.deploy(getWeb3Client(), credentials, BigInteger.valueOf(gasPrice),
+				BigInteger.valueOf(gasLimit)).send();
+		System.out.println(result.getTransactionReceipt().get().getTransactionHash());
+		return result.getContractAddress();
 	}
 	
 	/*public String increSupply(BigInteger value, String from, String pwd) throws Exception {

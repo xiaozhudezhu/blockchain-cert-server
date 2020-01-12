@@ -85,13 +85,16 @@ public class BlockChainTest {
 */		Certificate certificate = new Certificate();
 		certificate.setCertName("123");
 		certificate.setId("1e48868390b64bb2ae6b5a74f0bd8c0c");
+		//System.out.println(web3jUtil.createCertificate(certificate, web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));
 		//System.out.println(web3jUtil.updateCertificate(certificate, web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));
 		//System.out.println(web3jUtil.getCreateCertificateEvents("0x821c6efdd0e49fe9fcdc57a83e0eda1f6975ef8fc1b7aecb3ae2e9abdd47b808"));
 		//System.out.println(web3jUtil.deleteCertificate(certificate.getId(), web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));
 		//System.out.println(web3jUtil.increSupply(new BigInteger("1000"), web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));
 		//System.out.println(web3jUtil.getCertificate(certificate.getId()));
 		//System.out.println(web3jUtil.createWallet("123"));
-		//System.out.println("ETH Balance: " + web3jUtil.getBalance(from));
+		System.out.println("ETH Balance: " + web3jUtil.getBalance(web3jUtil.getAdminAccount()));
+		//System.out.println("Token Address: " + web3jUtil.deployCert(web3jUtil.getAdminAccount(), web3jUtil.getAdminPwd()));
+
 		/*System.out.println("Transaction: "
 				+ web3jUtil.sendUFOTransaction(from, "0x81824cd167b903cd7049980aef106586157630e2", pwd, amount));*/
 		//int i = 0;
