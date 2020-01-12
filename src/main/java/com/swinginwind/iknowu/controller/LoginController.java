@@ -129,7 +129,7 @@ public class LoginController {
 		String sessionId = Identities.uuid();
 		String code = sessionService.setVerifyCode(sessionId, phone);
 		boolean success = SDKSendTemplateSMS.sendTemplateSMS(phone,
-				ApplicationPropsUtil.getPropsValue("sms.templateid"), new String[] { code.split("_")[1], "3" });
+				ApplicationPropsUtil.getPropsValue("sms.templateid"), new String[] { code.split("_")[1], "3分钟" });
 		if(success) {
 			res.put("sessionId", sessionId);
 			res.setMsg("验证码发送成功");
